@@ -1,4 +1,3 @@
-build this app with the underlying data stored in json as a second doc
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -176,6 +175,16 @@ build this app with the underlying data stored in json as a second doc
 
         .action-btn.urgent:hover {
             background: #dc2626;
+            color: white;
+        }
+
+        .action-btn.primary {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .action-btn.primary:hover {
+            background: #2563eb;
             color: white;
         }
 
@@ -383,11 +392,11 @@ build this app with the underlying data stored in json as a second doc
             .header h1 {
                 font-size: 1.3rem;
             }
-            
+
             .faq-question {
                 font-size: 14px;
             }
-            
+
             .answer-content {
                 font-size: 13px;
             }
@@ -414,585 +423,412 @@ build this app with the underlying data stored in json as a second doc
 </head>
 <body>
     <div class="widget-container">
-        <!-- Info Banner -->
         <div class="info-banner">
             <span class="icon">📅</span>
-            <span class="info-text">
-                <span class="en">Last updated: September 16, 2025</span>
-                <span class="es" style="display:none;">Última actualización: 16 de septiembre, 2025</span>
-            </span>
+            <span class="info-text" id="lastUpdatedText">Loading...</span>
         </div>
 
-        <!-- Header -->
         <div class="header">
-            <h1>
-                <span class="en">Immigration Safety Guide 2025</span>
-                <span class="es" style="display:none;">Guía de Seguridad Migratoria 2025</span>
-            </h1>
-            
-            <!-- Language Toggle -->
+            <h1 id="widgetTitle">Immigration Safety Guide 2025</h1>
+
             <div class="language-toggle">
-                <button class="lang-btn active" onclick="setLanguage('en')">English</button>
-                <button class="lang-btn" onclick="setLanguage('es')">Español</button>
+                <button class="lang-btn active" data-lang="en">English</button>
+                <button class="lang-btn" data-lang="es">Español</button>
             </div>
-            
-            <!-- Search -->
+
             <div class="search-container">
-                <input type="text" class="search-input" id="searchInput" 
-                       placeholder="Search for help..." 
-                       oninput="performSearch()">
+                <input type="text" class="search-input" id="searchInput" placeholder="Loading..." oninput="performSearch()">
                 <span class="search-icon">🔍</span>
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <a href="#" onclick="getReadyNowApp(event)" class="action-btn urgent">
-                📱 <span class="en">Get ReadyNow App</span>
-                <span class="es" style="display:none;">Obtener ReadyNow</span>
-            </a>
-            <a href="https://www.immi.org/en" target="_blank" class="action-btn">
-                ✅ <span class="en">Check Eligibility</span>
-                <span class="es" style="display:none;">Verificar Elegibilidad</span>
-            </a>
-            <a href="tel:1-888-351-4024" class="action-btn">
-                📞 <span class="en">ICE Parent Hotline</span>
-                <span class="es" style="display:none;">Línea de Padres ICE</span>
-            </a>
-            <a href="https://www.nilc.org/resources/" target="_blank" class="action-btn">
-                ⚖️ <span class="en">Legal Help</span>
-                <span class="es" style="display:none;">Ayuda Legal</span>
-            </a>
-        </div>
+        <div class="quick-actions" id="quickActions"></div>
 
-        <!-- Filter Chips -->
-        <div class="filter-chips">
-            <div class="filter-chip active" onclick="filterCategory('all')">
-                <span class="en">All Topics</span>
-                <span class="es" style="display:none;">Todos</span>
-            </div>
-            <div class="filter-chip" onclick="filterCategory('urgent')">
-                <span class="en">🚨 Urgent</span>
-                <span class="es" style="display:none;">🚨 Urgente</span>
-            </div>
-            <div class="filter-chip" onclick="filterCategory('rights')">
-                <span class="en">Know Your Rights</span>
-                <span class="es" style="display:none;">Conozca Sus Derechos</span>
-            </div>
-            <div class="filter-chip" onclick="filterCategory('family')">
-                <span class="en">Family Safety</span>
-                <span class="es" style="display:none;">Seguridad Familiar</span>
-            </div>
-            <div class="filter-chip" onclick="filterCategory('work')">
-                <span class="en">Workplace</span>
-                <span class="es" style="display:none;">Trabajo</span>
-            </div>
-            <div class="filter-chip" onclick="filterCategory('documents')">
-                <span class="en">Documents</span>
-                <span class="es" style="display:none;">Documentos</span>
-            </div>
-        </div>
+        <div class="filter-chips" id="filterChips"></div>
 
-        <!-- FAQ Container -->
         <div class="faq-container" id="faqContainer">
-            <div class="loading">Loading...</div>
+            <div class="loading" id="loadingState">Loading...</div>
             <div id="faqContent"></div>
-            <div class="no-results" style="display:none;">
-                <span class="en">No results found. Try different keywords.</span>
-                <span class="es" style="display:none;">No se encontraron resultados. Pruebe con otras palabras.</span>
-            </div>
+            <div class="no-results" id="noResults" style="display:none;"></div>
         </div>
     </div>
 
-    <!-- Bottom Bar -->
     <div class="bottom-bar">
-        <a href="#" onclick="getReadyNowApp(event)" class="bottom-btn emergency">
-            <span class="en">📱 ICE Emergency App</span>
-            <span class="es" style="display:none;">📱 App de Emergencia</span>
-        </a>
-        <button class="bottom-btn" onclick="shareWidget()">
-            <span class="en">📤 Share This</span>
-            <span class="es" style="display:none;">📤 Compartir</span>
-        </button>
+        <a href="#" class="bottom-btn emergency" id="bottomAppButton">📱 Get Emergency App</a>
+        <button type="button" class="bottom-btn" id="bottomShareButton">📤 Share This</button>
     </div>
 
     <script>
-        // FAQ Data Structure
-        const faqData = {
-            en: [
-                // URGENT CATEGORY
-                {
-                    category: "🚨 Urgent Actions Required",
-                    categoryId: "urgent",
-                    items: [
-                        {
-                            question: "What do I need to know about the registration requirement?",
-                            answer: `
-                                <p><strong>Overview:</strong></p>
-                                <ul>
-                                    <li>A registration requirement was announced with an April 11, 2025 deadline (now passed)</li>
-                                    <li>Applies to non-citizens 14+ who have been in the US for 30+ days</li>
-                                    <li>Uses Form G-325R filed online at my.uscis.gov</li>
-                                    <li>Current enforcement status is unclear</li>
-                                </ul>
-                                <p><strong>Important Considerations:</strong></p>
-                                <ul>
-                                    <li>Both registering and not registering have potential consequences</li>
-                                    <li>Individual circumstances vary significantly</li>
-                                    <li>Legal challenges to the requirement may be ongoing</li>
-                                </ul>
-                                <p><strong>Recommended Action:</strong> Consult with an immigration attorney about your specific situation. Free consultations available through:</p>
-                                <ul>
-                                    <li>NILC: 213-639-3900</li>
-                                    <li>Local legal aid organizations</li>
-                                    <li>Immigration court help desks</li>
-                                </ul>
-                            `,
-                            tags: ["registration", "deadline", "G-325R", "legal advice", "requirements"]
-                        },
-                        {
-                            question: "ICE is at my door RIGHT NOW - what do I do?",
-                            answer: `
-                                <div class="legal-warning">
-                                    <strong>DO NOT OPEN THE DOOR!</strong>
-                                </div>
-                                <p><strong>Immediate Steps:</strong></p>
-                                <ol>
-                                    <li><strong>Stay calm and silent</strong> - Do not open the door</li>
-                                    <li><strong>Ask through the door:</strong> "Are you immigration? Do you have a warrant signed by a judge?"</li>
-                                    <li><strong>If they say yes to warrant:</strong> Ask them to slide it under the door</li>
-                                    <li><strong>Check the warrant:</strong> Only a JUDICIAL warrant (from a court) allows entry</li>
-                                    <li><strong>Say clearly:</strong> "I do not consent to your entry. I am exercising my right to remain silent."</li>
-                                    <li><strong>Open ReadyNow App</strong> if you have it - press emergency button</li>
-                                    <li><strong>Call your lawyer</strong> or rapid response: 1-855-435-7693</li>
-                                </ol>
-                                <div class="important-note">
-                                    Administrative warrants (Forms I-200, I-205) signed by ICE do NOT grant entry rights!
-                                </div>
-                            `,
-                            tags: ["ICE", "door", "warrant", "emergency", "rights", "migra", "policia"]
-                        },
-                        {
-                            question: "I was stopped by ICE in public - what are my rights?",
-                            answer: `
-                                <p><strong>Your Constitutional Rights:</strong></p>
-                                <ul>
-                                    <li>You have the right to remain silent</li>
-                                    <li>You do not have to answer questions about birthplace or how you entered the US</li>
-                                    <li>You can ask "Am I free to leave?" - If yes, walk away calmly</li>
-                                </ul>
-                                <p><strong>What to Say:</strong></p>
-                                <ul>
-                                    <li>"I am exercising my right to remain silent"</li>
-                                    <li>"I want to speak to an attorney"</li>
-                                    <li>"I do not consent to any searches"</li>
-                                </ul>
-                                <p><strong>What NOT to Do:</strong></p>
-                                <ul>
-                                    <li>Don't run - this gives legal reason for arrest</li>
-                                    <li>Don't lie or provide false documents</li>
-                                    <li>Don't sign anything without a lawyer</li>
-                                </ul>
-                                <div class="important-note">
-                                    The Supreme Court now allows stops based on language, work type, and location when combined. Stay calm and assert your rights.
-                                </div>
-                            `,
-                            tags: ["stopped", "public", "rights", "ICE encounter", "street"]
-                        }
-                    ]
-                },
-                // KNOW YOUR RIGHTS CATEGORY
-                {
-                    category: "⚖️ Know Your Rights",
-                    categoryId: "rights",
-                    items: [
-                        {
-                            question: "What's the difference between ICE warrants and judicial warrants?",
-                            answer: `
-                                <p><strong>Judicial Warrants (VALID for entry):</strong></p>
-                                <ul>
-                                    <li>Signed by a federal JUDGE</li>
-                                    <li>Says "U.S. District Court" at the top</li>
-                                    <li>Allows officers to enter your home</li>
-                                </ul>
-                                <p><strong>ICE Administrative Warrants (NOT valid for entry):</strong></p>
-                                <ul>
-                                    <li>Forms I-200 or I-205</li>
-                                    <li>Signed by ICE officers, not judges</li>
-                                    <li>Do NOT authorize entry into homes</li>
-                                    <li>You can refuse entry with these warrants</li>
-                                </ul>
-                                <div class="important-note">
-                                    Always ask to see the warrant through a window or have it slid under the door. Never open your door to check!
-                                </div>
-                            `,
-                            tags: ["warrant", "judicial", "administrative", "I-200", "I-205", "entry"]
-                        },
-                        {
-                            question: "Can I record ICE agents?",
-                            answer: `
-                                <p><strong>Yes, you have the right to record!</strong></p>
-                                <ul>
-                                    <li>First Amendment protects recording government officials in public</li>
-                                    <li>You can record video and audio in public spaces</li>
-                                    <li>Officers cannot delete footage or seize phones without warrants</li>
-                                </ul>
-                                <p><strong>Best Practices:</strong></p>
-                                <ul>
-                                    <li>Stay at safe distance - don't interfere</li>
-                                    <li>Livestream if possible (Facebook Live, Instagram)</li>
-                                    <li>Send video to trusted contact immediately</li>
-                                    <li>Note badge numbers, names, license plates</li>
-                                </ul>
-                                <p><strong>If witnessing an arrest, also:</strong></p>
-                                <ul>
-                                    <li>Ask the person's name and emergency contacts</li>
-                                    <li>Tell them their rights loudly</li>
-                                    <li>Contact rapid response: 1-855-435-7693</li>
-                                </ul>
-                            `,
-                            tags: ["record", "video", "filming", "witness", "First Amendment"]
-                        }
-                    ]
-                },
-                // FAMILY SAFETY CATEGORY
-                {
-                    category: "👨‍👩‍👧‍👦 Family Safety Planning",
-                    categoryId: "family",
-                    items: [
-                        {
-                            question: "What legal documents do I need to protect my children?",
-                            answer: `
-                                <p><strong>Essential Documents (Complete within 30 days):</strong></p>
-                                <ul>
-                                    <li><strong>Power of Attorney:</strong> Allows someone to make decisions for your children</li>
-                                    <li><strong>Caregiver's Authorization Affidavit:</strong> For school and medical decisions</li>
-                                    <li><strong>Standby Guardianship:</strong> Takes effect if you're detained</li>
-                                </ul>
-                                <p><strong>State Variations:</strong></p>
-                                <ul>
-                                    <li><strong>New Jersey:</strong> Power of Attorney expires every 6 months</li>
-                                    <li><strong>New York:</strong> Extended to 12 months, includes "administrative separation"</li>
-                                    <li><strong>California:</strong> Three options available, verbal agreements maintain parental rights</li>
-                                    <li><strong>Maryland, NY, DC:</strong> Include "adverse immigration action" provisions</li>
-                                </ul>
-                                <div class="important-note">
-                                    5.62 million U.S. citizen children are at risk of family separation. Act now to protect them.
-                                </div>
-                                <p><strong>ICE Parental Interest Hotline:</strong> 1-888-351-4024 or Parental.Interests@ice.dhs.gov</p>
-                            `,
-                            tags: ["children", "power of attorney", "guardianship", "custody", "family plan"]
-                        },
-                        {
-                            question: "How do I create an emergency family plan?",
-                            answer: `
-                                <p><strong>Step 1: Choose Emergency Caregivers</strong></p>
-                                <ul>
-                                    <li>Identify trusted adults with legal status</li>
-                                    <li>Discuss and get their consent</li>
-                                    <li>Share children's medical info, school contacts</li>
-                                </ul>
-                                <p><strong>Step 2: Organize Critical Documents</strong></p>
-                                <ul>
-                                    <li>Birth certificates, passports, medical records</li>
-                                    <li>Make 3 copies: home, trusted person, cloud storage</li>
-                                    <li>Use encrypted storage: Sync.com or pCloud</li>
-                                </ul>
-                                <p><strong>Step 3: Financial Preparation</strong></p>
-                                <ul>
-                                    <li>Open individual bank accounts (not joint)</li>
-                                    <li>Create UTMA accounts for children's expenses</li>
-                                    <li>Ensure emergency fund access for caregiver</li>
-                                </ul>
-                                <p><strong>Step 4: Communication Plan</strong></p>
-                                <ul>
-                                    <li>Create code words for emergencies</li>
-                                    <li>Save ICE hotline: 1-888-351-4024</li>
-                                    <li>Program rapid response: 1-855-435-7693</li>
-                                </ul>
-                                <a href="https://www.ilrc.org/family-preparedness-plan" target="_blank" class="share-btn">Download Family Plan Template</a>
-                            `,
-                            tags: ["emergency plan", "preparation", "family", "documents", "caregivers"]
-                        }
-                    ]
-                },
-                // WORKPLACE CATEGORY
-                {
-                    category: "💼 Workplace Rights",
-                    categoryId: "work",
-                    items: [
-                        {
-                            question: "What should I do if ICE comes to my workplace?",
-                            answer: `
-                                <p><strong>Immediate Response:</strong></p>
-                                <ul>
-                                    <li>Stay calm - DO NOT RUN (gives legal reason for arrest)</li>
-                                    <li>Say: "I am exercising my right to remain silent"</li>
-                                    <li>Say: "I want to speak to an attorney"</li>
-                                    <li>Don't sign anything</li>
-                                </ul>
-                                <p><strong>Know Your Workspace:</strong></p>
-                                <ul>
-                                    <li><strong>Private areas</strong> (break rooms, offices, kitchens) - ICE needs judicial warrant</li>
-                                    <li><strong>Public areas</strong> (retail floor, restaurant dining) - No warrant needed</li>
-                                    <li>Administrative warrants (I-200/I-205) don't allow private area access</li>
-                                </ul>
-                                <p><strong>High-Risk Industries in 2025:</strong></p>
-                                <ul>
-                                    <li>Construction (100+ detained in Florida)</li>
-                                    <li>Hospitality (25% revenue drops reported)</li>
-                                    <li>Agriculture (30% capacity reductions)</li>
-                                    <li>Meatpacking (production down to 20%)</li>
-                                </ul>
-                                <p><strong>Your Rights Remain:</strong></p>
-                                <ul>
-                                    <li>Right to final paycheck</li>
-                                    <li>Workers' compensation for injuries</li>
-                                    <li>Protection during DOL/EEOC investigations</li>
-                                </ul>
-                            `,
-                            tags: ["workplace", "ICE raid", "work", "employer", "construction", "restaurant"]
-                        }
-                    ]
-                },
-                // DOCUMENTS CATEGORY
-                {
-                    category: "📄 Documents & Status",
-                    categoryId: "documents",
-                    items: [
-                        {
-                            question: "What documents should I carry daily based on my status?",
-                            answer: `
-                                <p><strong>Green Card Holders:</strong></p>
-                                <ul>
-                                    <li>Form I-551 (Permanent Resident Card) - MUST carry</li>
-                                    <li>Valid passport with ADIT stamp (if applicable)</li>
-                                </ul>
-                                <p><strong>Work Permit Holders:</strong></p>
-                                <ul>
-                                    <li>Form I-766 (EAD card)</li>
-                                    <li>Government-issued photo ID</li>
-                                </ul>
-                                <p><strong>DACA Recipients:</strong></p>
-                                <ul>
-                                    <li>Valid EAD card</li>
-                                    <li>REAL ID-compliant driver's license (required for flights after May 7, 2025)</li>
-                                    <li>Copy of DACA approval notice</li>
-                                </ul>
-                                <p><strong>TPS Holders:</strong></p>
-                                <ul>
-                                    <li>EAD with A12 or C19 category</li>
-                                    <li>TPS approval notices</li>
-                                    <li>Note: Venezuela 2021 designation expired Sept 10, 2025</li>
-                                </ul>
-                                <p><strong>Undocumented Individuals:</strong></p>
-                                <ul>
-                                    <li>Proof of 2+ years presence (crucial for avoiding expedited removal)</li>
-                                    <li>Lease agreements, utility bills, tax returns</li>
-                                    <li>School enrollment records, medical receipts</li>
-                                    <li>Do NOT carry original documents - use copies</li>
-                                </ul>
-                                <div class="important-note">
-                                    Never carry false documents - automatic disqualification from all benefits
-                                </div>
-                            `,
-                            tags: ["documents", "papers", "green card", "DACA", "TPS", "work permit", "papeles"]
-                        }
-                    ]
-                }
-            ],
-            es: [
-                // Spanish translations of the same FAQs
-                {
-                    category: "🚨 Acciones Urgentes Requeridas",
-                    categoryId: "urgent",
-                    items: [
-                        {
-                            question: "¿Qué necesito saber sobre el requisito de registro?",
-                            answer: `
-                                <p><strong>Resumen:</strong></p>
-                                <ul>
-                                    <li>Se anunció un requisito de registro con fecha límite del 11 de abril de 2025 (ya pasó)</li>
-                                    <li>Aplica a no ciudadanos de 14+ años que han estado en EE.UU. por 30+ días</li>
-                                    <li>Usa el formulario G-325R presentado en línea en my.uscis.gov</li>
-                                    <li>El estado actual de aplicación no está claro</li>
-                                </ul>
-                                <p><strong>Consideraciones Importantes:</strong></p>
-                                <ul>
-                                    <li>Tanto registrarse como no registrarse tienen consecuencias potenciales</li>
-                                    <li>Las circunstancias individuales varían significativamente</li>
-                                    <li>Pueden existir desafíos legales al requisito</li>
-                                </ul>
-                                <p><strong>Acción Recomendada:</strong> Consulte con un abogado de inmigración sobre su situación específica. Consultas gratuitas disponibles a través de:</p>
-                                <ul>
-                                    <li>NILC: 213-639-3900</li>
-                                    <li>Organizaciones locales de ayuda legal</li>
-                                    <li>Centros de ayuda en cortes de inmigración</li>
-                                </ul>
-                            `,
-                            tags: ["registro", "fecha límite", "G-325R", "asesoría legal", "requisitos"]
-                        },
-                        {
-                            question: "ICE está en mi puerta AHORA MISMO - ¿qué hago?",
-                            answer: `
-                                <div class="legal-warning">
-                                    <strong>¡NO ABRA LA PUERTA!</strong>
-                                </div>
-                                <p><strong>Pasos Inmediatos:</strong></p>
-                                <ol>
-                                    <li><strong>Mantenga la calma y el silencio</strong> - No abra la puerta</li>
-                                    <li><strong>Pregunte a través de la puerta:</strong> "¿Son de inmigración? ¿Tienen una orden firmada por un juez?"</li>
-                                    <li><strong>Si dicen que sí a la orden:</strong> Pídales que la deslicen por debajo de la puerta</li>
-                                    <li><strong>Revise la orden:</strong> Solo una orden JUDICIAL (de un tribunal) permite la entrada</li>
-                                    <li><strong>Diga claramente:</strong> "No consiento su entrada. Estoy ejerciendo mi derecho a permanecer en silencio."</li>
-                                    <li><strong>Abra la aplicación ReadyNow</strong> si la tiene - presione el botón de emergencia</li>
-                                    <li><strong>Llame a su abogado</strong> o respuesta rápida: 1-855-435-7693</li>
-                                </ol>
-                                <div class="important-note">
-                                    ¡Las órdenes administrativas (Formularios I-200, I-205) firmadas por ICE NO otorgan derechos de entrada!
-                                </div>
-                            `,
-                            tags: ["ICE", "puerta", "orden", "emergencia", "derechos", "migra", "policía"]
-                        }
-                    ]
-                }
-            ]
-        };
-
-        // Initialize Fuse.js for fuzzy search
+        let appData = null;
+        let localizedCategories = [];
         let fuse;
         let currentLanguage = 'en';
         let currentFilter = 'all';
+        let searchMinLength = 2;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+            });
+
+            document.getElementById('bottomShareButton').addEventListener('click', shareWidget);
+            document.getElementById('bottomAppButton').addEventListener('click', event => getReadyNowApp(event, 'readyNow'));
+
+            loadData();
+        });
+
+        async function loadData() {
+            const loadingState = document.getElementById('loadingState');
+            if (loadingState) {
+                loadingState.style.display = 'block';
+            }
+
+            try {
+                const response = await fetch('data.json', { cache: 'no-cache' });
+                if (!response.ok) {
+                    throw new Error(`Failed to load data: ${response.status}`);
+                }
+
+                appData = await response.json();
+                currentLanguage = appData.metadata?.defaultLanguage || 'en';
+                currentFilter = 'all';
+                setLanguage(currentLanguage);
+            } catch (error) {
+                console.error('Error loading FAQ data:', error);
+                const noResults = document.getElementById('noResults');
+                if (noResults) {
+                    noResults.textContent = 'Unable to load data. Please try again later.';
+                    noResults.style.display = 'block';
+                }
+            } finally {
+                if (loadingState) {
+                    loadingState.style.display = 'none';
+                }
+            }
+        }
+
+        function setLanguage(lang) {
+            if (!appData) {
+                return;
+            }
+
+            currentLanguage = lang;
+            updateLanguageButtons();
+            updateLocalizedCategories();
+            initializeFuse();
+            updateStaticText();
+            renderQuickActions();
+            renderFilterChips();
+
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+            }
+
+            displayFAQs();
+        }
+
+        function updateLanguageButtons() {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === currentLanguage);
+            });
+        }
+
+        function updateLocalizedCategories() {
+            localizedCategories = (appData.categories || []).map(category => {
+                const items = (category.faqs || []).map((faq, index) => {
+                    const question = faq.question?.[currentLanguage] || '';
+                    const answer = faq.answer?.[currentLanguage] || '';
+                    if (!question || !answer) {
+                        return null;
+                    }
+
+                    const tags = faq.tags?.[currentLanguage] || [];
+                    const keywords = faq.keywords?.[currentLanguage] || [];
+                    const sortPriority = typeof faq.priority === 'number' ? faq.priority : index + 1000;
+
+                    return {
+                        id: faq.id,
+                        question,
+                        answer,
+                        tags,
+                        keywords,
+                        sortPriority,
+                        sortIndex: index
+                    };
+                }).filter(Boolean)
+                  .sort((a, b) => {
+                      if (a.sortPriority !== b.sortPriority) {
+                          return a.sortPriority - b.sortPriority;
+                      }
+                      return a.sortIndex - b.sortIndex;
+                  })
+                  .map(({ sortPriority, sortIndex, ...item }) => item);
+
+                return {
+                    id: category.id,
+                    icon: category.icon || '',
+                    name: category.name?.[currentLanguage] || '',
+                    items
+                };
+            }).filter(category => category.name && category.items.length > 0);
+
+            if (currentFilter !== 'all' && !localizedCategories.some(cat => cat.id === currentFilter)) {
+                currentFilter = 'all';
+            }
+        }
 
         function initializeFuse() {
+            if (!localizedCategories.length) {
+                fuse = null;
+                return;
+            }
+
             const searchData = [];
-            const data = faqData[currentLanguage];
-            
-            data.forEach(category => {
+            localizedCategories.forEach(category => {
                 category.items.forEach(item => {
                     searchData.push({
                         question: item.question,
-                        answer: item.answer.replace(/<[^>]*>/g, ''), // Strip HTML for search
-                        categoryId: category.categoryId,
-                        categoryName: category.category,
-                        tags: item.tags.join(' '),
-                        fullItem: item,
-                        fullCategory: category
+                        answer: item.answer.replace(/<[^>]*>/g, ' '),
+                        tags: (item.tags || []).join(' '),
+                        keywords: (item.keywords || []).join(' '),
+                        categoryId: category.id,
+                        categoryName: category.name,
+                        categoryIcon: category.icon,
+                        fullCategory: category,
+                        fullItem: item
                     });
                 });
             });
 
-            const fuseOptions = {
-                keys: ['question', 'answer', 'tags'],
+            const defaultOptions = {
+                keys: ['question', 'answer', 'tags', 'keywords'],
                 threshold: 0.3,
                 includeScore: true,
                 minMatchCharLength: 2,
                 shouldSort: true
             };
 
+            const fuseOptions = {
+                ...defaultOptions,
+                ...(appData.config?.searchConfig?.fuseOptions || {})
+            };
+
+            searchMinLength = fuseOptions.minMatchCharLength ?? 2;
             fuse = new Fuse(searchData, fuseOptions);
         }
 
-        function setLanguage(lang) {
-            currentLanguage = lang;
-            
-            // Update UI language
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            // Toggle language elements
-            document.querySelectorAll('.en').forEach(el => {
-                el.style.display = lang === 'en' ? 'inline' : 'none';
-            });
-            document.querySelectorAll('.es').forEach(el => {
-                el.style.display = lang === 'es' ? 'inline' : 'none';
-            });
-            
-            // Update search placeholder
-            document.getElementById('searchInput').placeholder = 
-                lang === 'en' ? 'Search for help...' : 'Buscar ayuda...';
-            
-            // Reinitialize search and display
-            initializeFuse();
-            displayFAQs();
+        function updateStaticText() {
+            const translations = appData.uiTranslations?.[currentLanguage] || appData.uiTranslations?.en || {};
+
+            const titleEl = document.getElementById('widgetTitle');
+            if (titleEl) {
+                titleEl.textContent = translations.title || 'Immigration Safety Guide';
+            }
+
+            const lastUpdatedEl = document.getElementById('lastUpdatedText');
+            if (lastUpdatedEl) {
+                const formattedDate = formatDate(appData.metadata?.lastUpdated, currentLanguage);
+                const label = translations.lastUpdated || 'Last updated';
+                lastUpdatedEl.textContent = formattedDate ? `${label}: ${formattedDate}` : label;
+            }
+
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.placeholder = translations.search || 'Search for help...';
+            }
+
+            const noResults = document.getElementById('noResults');
+            if (noResults) {
+                noResults.textContent = translations.noResults || 'No results found. Try different keywords.';
+            }
+
+            const appBtn = document.getElementById('bottomAppButton');
+            if (appBtn) {
+                const appText = translations.getApp || 'Get Emergency App';
+                appBtn.innerHTML = `📱 ${appText}`;
+            }
+
+            const shareBtn = document.getElementById('bottomShareButton');
+            if (shareBtn) {
+                const shareText = translations.shareThis || 'Share This';
+                shareBtn.innerHTML = `📤 ${shareText}`;
+            }
         }
 
-        function filterCategory(category) {
-            currentFilter = category;
-            
-            // Update active chip
-            document.querySelectorAll('.filter-chip').forEach(chip => {
-                chip.classList.remove('active');
+        function formatDate(value, lang) {
+            if (!value) {
+                return '';
+            }
+
+            const date = new Date(`${value}T00:00:00`);
+            if (Number.isNaN(date.getTime())) {
+                return value;
+            }
+
+            return new Intl.DateTimeFormat(lang === 'es' ? 'es-US' : 'en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }).format(date);
+        }
+
+        function renderQuickActions() {
+            const container = document.getElementById('quickActions');
+            if (!container) {
+                return;
+            }
+
+            container.innerHTML = '';
+
+            const actions = (appData.quickActions || [])
+                .map((action, index) => ({ action, index }))
+                .sort((a, b) => {
+                    const priorityA = typeof a.action.priority === 'number' ? a.action.priority : Number.MAX_SAFE_INTEGER;
+                    const priorityB = typeof b.action.priority === 'number' ? b.action.priority : Number.MAX_SAFE_INTEGER;
+                    if (priorityA !== priorityB) {
+                        return priorityA - priorityB;
+                    }
+                    return a.index - b.index;
+                })
+                .map(item => item.action);
+
+            const fallbackLang = appData.metadata?.defaultLanguage || 'en';
+
+            actions.forEach(action => {
+                const button = document.createElement('a');
+                button.className = 'action-btn';
+                if (action.color) {
+                    button.classList.add(action.color);
+                }
+
+                const label = action.label?.[currentLanguage] || action.label?.[fallbackLang] || '';
+                button.innerHTML = `${action.icon ? `${action.icon} ` : ''}<span>${label}</span>`;
+
+                if (action.type === 'app' && action.action === 'detectDevice') {
+                    button.href = '#';
+                    button.addEventListener('click', event => getReadyNowApp(event, action.id));
+                } else {
+                    button.href = action.action || '#';
+                    if (action.type === 'external') {
+                        button.target = '_blank';
+                        button.rel = 'noopener noreferrer';
+                    }
+                }
+
+                container.appendChild(button);
             });
-            event.target.classList.add('active');
-            
-            // Clear search when filtering
-            document.getElementById('searchInput').value = '';
-            
+        }
+
+        function renderFilterChips() {
+            const container = document.getElementById('filterChips');
+            if (!container) {
+                return;
+            }
+
+            container.innerHTML = '';
+            const fallbackLang = appData.metadata?.defaultLanguage || 'en';
+
+            (appData.filterChips || []).forEach(chip => {
+                const element = document.createElement('div');
+                element.className = 'filter-chip';
+                if (chip.id === currentFilter) {
+                    element.classList.add('active');
+                }
+
+                element.dataset.filterId = chip.id;
+                const label = chip.label?.[currentLanguage] || chip.label?.[fallbackLang] || '';
+                element.innerHTML = `${chip.icon ? `${chip.icon} ` : ''}<span>${label}</span>`;
+
+                element.addEventListener('click', () => filterCategory(chip.id));
+                container.appendChild(element);
+            });
+        }
+
+        function filterCategory(categoryId) {
+            currentFilter = categoryId;
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.filterId === categoryId);
+            });
+
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+            }
+
             displayFAQs();
         }
 
         function displayFAQs(searchResults = null) {
             const container = document.getElementById('faqContent');
-            const noResults = document.querySelector('.no-results');
-            const data = faqData[currentLanguage];
-            
-            if (searchResults) {
-                // Display search results
+            const noResults = document.getElementById('noResults');
+            const loadingState = document.getElementById('loadingState');
+
+            if (loadingState) {
+                loadingState.style.display = 'none';
+            }
+
+            if (!container || !noResults) {
+                return;
+            }
+
+            noResults.style.display = 'none';
+
+            if (!localizedCategories.length) {
+                container.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+
+            if (Array.isArray(searchResults)) {
                 if (searchResults.length === 0) {
                     container.innerHTML = '';
                     noResults.style.display = 'block';
                     return;
                 }
-                
-                noResults.style.display = 'none';
-                
-                // Group results by category
+
                 const grouped = {};
                 searchResults.forEach(result => {
-                    const cat = result.item.fullCategory;
-                    if (!grouped[cat.category]) {
-                        grouped[cat.category] = {
-                            category: cat.category,
-                            categoryId: cat.categoryId,
+                    const catId = result.item.categoryId;
+                    if (!grouped[catId]) {
+                        grouped[catId] = {
+                            id: catId,
+                            icon: result.item.categoryIcon,
+                            name: result.item.categoryName,
                             items: []
                         };
                     }
-                    grouped[cat.category].items.push(result.item.fullItem);
+                    grouped[catId].items.push(result.item.fullItem);
                 });
-                
-                container.innerHTML = Object.values(grouped).map(cat => 
-                    renderCategory(cat)
-                ).join('');
-                
+
+                container.innerHTML = Object.values(grouped).map(renderCategory).join('');
             } else {
-                // Display filtered or all FAQs
-                noResults.style.display = 'none';
-                
-                const filteredData = currentFilter === 'all' 
-                    ? data 
-                    : data.filter(cat => cat.categoryId === currentFilter);
-                
-                container.innerHTML = filteredData.map(cat => 
-                    renderCategory(cat)
-                ).join('');
+                const categoriesToRender = currentFilter === 'all'
+                    ? localizedCategories
+                    : localizedCategories.filter(category => category.id === currentFilter);
+
+                if (!categoriesToRender.length) {
+                    container.innerHTML = '';
+                    noResults.style.display = 'block';
+                    return;
+                }
+
+                container.innerHTML = categoriesToRender.map(renderCategory).join('');
             }
-            
-            // Attach event listeners
+
             attachFAQListeners();
         }
 
         function renderCategory(category) {
+            const iconHtml = category.icon ? `<span class="category-icon">${category.icon}</span>` : '';
             return `
                 <div class="faq-category">
                     <div class="category-header">
-                        <span class="category-icon">${category.category.substring(0, 2)}</span>
-                        <span>${category.category.substring(2)}</span>
+                        ${iconHtml}
+                        <span>${category.name}</span>
                     </div>
                     ${category.items.map((item, index) => `
-                        <div class="faq-item" data-category="${category.categoryId}" data-index="${index}">
+                        <div class="faq-item" data-category="${category.id}" data-index="${index}">
                             <div class="faq-question">
                                 <span>${item.question}</span>
                                 <span class="faq-icon">▼</span>
@@ -1010,24 +846,24 @@ build this app with the underlying data stored in json as a second doc
         }
 
         function renderShareButton(question) {
-            const text = encodeURIComponent(`Immigration Help: ${question}\n\nFind answers at: `);
+            const translations = appData.uiTranslations?.[currentLanguage] || {};
+            const label = translations.shareViaWhatsApp || 'Share via WhatsApp';
+            const text = encodeURIComponent(`Immigration Help: ${question}\n\n`);
             const url = encodeURIComponent(window.location.href);
-            return `<a href="https://wa.me/?text=${text}${url}" target="_blank" class="share-btn">Share via WhatsApp</a>`;
+            return `<a href="https://wa.me/?text=${text}${url}" target="_blank" class="share-btn">${label}</a>`;
         }
 
         function attachFAQListeners() {
             document.querySelectorAll('.faq-question').forEach(question => {
                 question.addEventListener('click', function() {
                     const item = this.parentElement;
-                    const wasActive = item.classList.contains('active');
-                    
-                    // Close all items
-                    document.querySelectorAll('.faq-item').forEach(i => {
-                        i.classList.remove('active');
+                    const isActive = item.classList.contains('active');
+
+                    document.querySelectorAll('.faq-item').forEach(element => {
+                        element.classList.remove('active');
                     });
-                    
-                    // Toggle current item
-                    if (!wasActive) {
+
+                    if (!isActive) {
                         item.classList.add('active');
                     }
                 });
@@ -1035,872 +871,75 @@ build this app with the underlying data stored in json as a second doc
         }
 
         function performSearch() {
-            const query = document.getElementById('searchInput').value.trim();
-            
-            if (query.length < 2) {
+            if (!fuse) {
                 displayFAQs();
                 return;
             }
-            
+
+            const searchInput = document.getElementById('searchInput');
+            if (!searchInput) {
+                return;
+            }
+
+            const query = searchInput.value.trim();
+            if (query.length < searchMinLength) {
+                displayFAQs();
+                return;
+            }
+
             const results = fuse.search(query);
             displayFAQs(results);
         }
 
-        function getReadyNowApp(event) {
-            event.preventDefault();
-            
-            // Detect device type
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            
-            // iOS detection
-            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                window.open('https://apps.apple.com/us/app/readynow/id6744073026', '_blank');
-            } 
-            // Android detection
-            else if (/android/i.test(userAgent)) {
-                window.open('https://play.google.com/store/apps/details?id=com.innovationlab.alertbuttonexpo', '_blank');
+        function getReadyNowApp(event, appId = 'readyNow') {
+            if (event) {
+                event.preventDefault();
             }
-            // Default fallback
-            else {
-                window.open('https://readynow.app.link/download', '_blank');
+
+            const appConfig = appData?.config?.apps?.[appId];
+            if (!appConfig) {
+                return;
+            }
+
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream && appConfig.ios) {
+                window.open(appConfig.ios, '_blank');
+            } else if (/android/i.test(userAgent) && appConfig.android) {
+                window.open(appConfig.android, '_blank');
+            } else if (appConfig.universal) {
+                window.open(appConfig.universal, '_blank');
+            } else {
+                const fallback = appConfig.ios || appConfig.android;
+                if (fallback) {
+                    window.open(fallback, '_blank');
+                }
             }
         }
 
-        function shareWidget() {
-            const text = currentLanguage === 'en' 
-                ? 'Immigration Safety Guide - Know Your Rights' 
-                : 'Guía de Seguridad Migratoria - Conozca Sus Derechos';
-                
+        function shareWidget(event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            const translations = appData?.uiTranslations?.[currentLanguage] || {};
+            const shareText = translations.shareThis || 'Share This';
+            const shareData = {
+                title: shareText,
+                text: shareText,
+                url: window.location.href
+            };
+
+            const fallbackUrl = `https://wa.me/?text=${encodeURIComponent(shareText + '\n' + window.location.href)}`;
+
             if (navigator.share) {
-                navigator.share({
-                    title: text,
-                    text: text,
-                    url: window.location.href
+                navigator.share(shareData).catch(() => {
+                    window.open(fallbackUrl, '_blank');
                 });
             } else {
-                // Fallback to WhatsApp
-                window.open(`https://wa.me/?text=${encodeURIComponent(text + '\n' + window.location.href)}`);
+                window.open(fallbackUrl, '_blank');
             }
         }
-
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeFuse();
-            displayFAQs();
-        });
     </script>
 </body>
-</html>{
-  "metadata": {
-    "version": "1.0.0",
-    "lastUpdated": "2025-09-16",
-    "languages": ["en", "es"],
-    "defaultLanguage": "en",
-    "dataSource": "Immigration Safety Guide 2025"
-  },
-  
-  "config": {
-    "apps": {
-      "readyNow": {
-        "universal": "https://readynow.app.link/download",
-        "ios": "https://apps.apple.com/us/app/readynow/id6744073026",
-        "android": "https://play.google.com/store/apps/details?id=com.innovationlab.alertbuttonexpo",
-        "name": {
-          "en": "ReadyNow Emergency App",
-          "es": "ReadyNow App de Emergencia"
-        },
-        "description": {
-          "en": "One-tap emergency alerts for ICE encounters",
-          "es": "Alertas de emergencia con un toque para encuentros con ICE"
-        }
-      }
-    },
-    
-    "hotlines": {
-      "iceParental": {
-        "number": "1-888-351-4024",
-        "email": "Parental.Interests@ice.dhs.gov",
-        "name": {
-          "en": "ICE Parental Interests Hotline",
-          "es": "Línea de Intereses Parentales de ICE"
-        }
-      },
-      "rapidResponse": {
-        "number": "1-855-435-7693",
-        "name": {
-          "en": "Rapid Response Network",
-          "es": "Red de Respuesta Rápida"
-        }
-      },
-      "domesticViolence": {
-        "number": "1-800-799-7233",
-        "name": {
-          "en": "National Domestic Violence Hotline",
-          "es": "Línea Nacional de Violencia Doméstica"
-        }
-      },
-      "nilc": {
-        "number": "213-639-3900",
-        "name": {
-          "en": "National Immigration Law Center",
-          "es": "Centro Nacional de Leyes de Inmigración"
-        }
-      }
-    },
-    
-    "externalResources": {
-      "immi": {
-        "url": "https://www.immi.org/en",
-        "name": {
-          "en": "Check Immigration Eligibility",
-          "es": "Verificar Elegibilidad Migratoria"
-        }
-      },
-      "nilcResources": {
-        "url": "https://www.nilc.org/resources/",
-        "name": {
-          "en": "NILC Legal Resources",
-          "es": "Recursos Legales NILC"
-        }
-      },
-      "citizenshipWorks": {
-        "url": "https://www.citizenshipworks.org/en",
-        "name": {
-          "en": "CitizenshipWorks",
-          "es": "CitizenshipWorks"
-        }
-      },
-      "ilrc": {
-        "url": "https://www.ilrc.org/family-preparedness-plan",
-        "name": {
-          "en": "Family Preparedness Plan",
-          "es": "Plan de Preparación Familiar"
-        }
-      }
-    },
-    
-    "searchConfig": {
-      "fuseOptions": {
-        "threshold": 0.3,
-        "includeScore": true,
-        "minMatchCharLength": 2,
-        "shouldSort": true,
-        "keys": ["question", "answer", "tags", "keywords"]
-      }
-    }
-  },
-  
-  "uiTranslations": {
-    "en": {
-      "title": "Immigration Safety Guide 2025",
-      "lastUpdated": "Last updated",
-      "search": "Search for help...",
-      "noResults": "No results found. Try different keywords.",
-      "allTopics": "All Topics",
-      "shareThis": "Share This",
-      "shareViaWhatsApp": "Share via WhatsApp",
-      "getApp": "Get Emergency App",
-      "checkEligibility": "Check Eligibility",
-      "legalHelp": "Legal Help"
-    },
-    "es": {
-      "title": "Guía de Seguridad Migratoria 2025",
-      "lastUpdated": "Última actualización",
-      "search": "Buscar ayuda...",
-      "noResults": "No se encontraron resultados. Pruebe con otras palabras.",
-      "allTopics": "Todos los Temas",
-      "shareThis": "Compartir",
-      "shareViaWhatsApp": "Compartir por WhatsApp",
-      "getApp": "Obtener App de Emergencia",
-      "checkEligibility": "Verificar Elegibilidad",
-      "legalHelp": "Ayuda Legal"
-    }
-  },
-  
-  "categories": [
-    {
-      "id": "urgent",
-      "icon": "🚨",
-      "name": {
-        "en": "Urgent Information",
-        "es": "Información Urgente"
-      },
-      "description": {
-        "en": "Critical information you need to know immediately",
-        "es": "Información crítica que necesita saber inmediatamente"
-      },
-      "faqs": [
-        {
-          "id": "registration-requirement",
-          "priority": 1,
-          "question": {
-            "en": "What do I need to know about the registration requirement?",
-            "es": "¿Qué necesito saber sobre el requisito de registro?"
-          },
-          "answer": {
-            "en": "<p><strong>Overview:</strong></p><ul><li>A registration requirement was announced with an April 11, 2025 deadline (now passed)</li><li>Applies to non-citizens 14+ who have been in the US for 30+ days</li><li>Uses Form G-325R filed online at my.uscis.gov</li><li>Current enforcement status is unclear</li></ul><p><strong>Important Considerations:</strong></p><ul><li>Both registering and not registering have potential consequences</li><li>Individual circumstances vary significantly</li><li>Legal challenges to the requirement may be ongoing</li></ul><p><strong>Recommended Action:</strong> Consult with an immigration attorney about your specific situation.</p>",
-            "es": "<p><strong>Resumen:</strong></p><ul><li>Se anunció un requisito de registro con fecha límite del 11 de abril de 2025 (ya pasó)</li><li>Aplica a no ciudadanos de 14+ años que han estado en EE.UU. por 30+ días</li><li>Usa el formulario G-325R presentado en línea en my.uscis.gov</li><li>El estado actual de aplicación no está claro</li></ul><p><strong>Consideraciones Importantes:</strong></p><ul><li>Tanto registrarse como no registrarse tienen consecuencias potenciales</li><li>Las circunstancias individuales varían significativamente</li><li>Pueden existir desafíos legales al requisito</li></ul><p><strong>Acción Recomendada:</strong> Consulte con un abogado de inmigración sobre su situación específica.</p>"
-          },
-          "tags": {
-            "en": ["registration", "deadline", "G-325R", "legal advice", "requirements", "april 2025"],
-            "es": ["registro", "fecha límite", "G-325R", "asesoría legal", "requisitos", "abril 2025"]
-          },
-          "relatedResources": ["nilc", "ilrc"]
-        },
-        {
-          "id": "ice-at-door",
-          "priority": 1,
-          "question": {
-            "en": "ICE is at my door RIGHT NOW - what do I do?",
-            "es": "ICE está en mi puerta AHORA MISMO - ¿qué hago?"
-          },
-          "answer": {
-            "en": "<div class='alert-urgent'><strong>DO NOT OPEN THE DOOR!</strong></div><p><strong>Immediate Steps:</strong></p><ol><li><strong>Stay calm and silent</strong> - Do not open the door</li><li><strong>Ask through the door:</strong> 'Are you immigration? Do you have a warrant signed by a judge?'</li><li><strong>If they say yes to warrant:</strong> Ask them to slide it under the door</li><li><strong>Check the warrant:</strong> Only a JUDICIAL warrant (from a court) allows entry</li><li><strong>Say clearly:</strong> 'I do not consent to your entry. I am exercising my right to remain silent.'</li><li><strong>Open ReadyNow App</strong> if you have it - press emergency button</li><li><strong>Call your lawyer</strong> or rapid response hotline</li></ol><div class='alert-info'>Administrative warrants (Forms I-200, I-205) signed by ICE do NOT grant entry rights!</div>",
-            "es": "<div class='alert-urgent'><strong>¡NO ABRA LA PUERTA!</strong></div><p><strong>Pasos Inmediatos:</strong></p><ol><li><strong>Mantenga la calma y el silencio</strong> - No abra la puerta</li><li><strong>Pregunte a través de la puerta:</strong> '¿Son de inmigración? ¿Tienen una orden firmada por un juez?'</li><li><strong>Si dicen que sí a la orden:</strong> Pídales que la deslicen por debajo de la puerta</li><li><strong>Revise la orden:</strong> Solo una orden JUDICIAL (de un tribunal) permite la entrada</li><li><strong>Diga claramente:</strong> 'No consiento su entrada. Estoy ejerciendo mi derecho a permanecer en silencio.'</li><li><strong>Abra la aplicación ReadyNow</strong> si la tiene - presione el botón de emergencia</li><li><strong>Llame a su abogado</strong> o línea de respuesta rápida</li></ol><div class='alert-info'>¡Las órdenes administrativas (Formularios I-200, I-205) firmadas por ICE NO otorgan derechos de entrada!</div>"
-          },
-          "tags": {
-            "en": ["ICE", "door", "warrant", "emergency", "rights", "police", "immediate help"],
-            "es": ["ICE", "puerta", "orden", "emergencia", "derechos", "migra", "policía", "ayuda inmediata"]
-          },
-          "relatedResources": ["readyNow", "rapidResponse"]
-        },
-        {
-          "id": "stopped-in-public",
-          "priority": 1,
-          "question": {
-            "en": "I was stopped by ICE in public - what are my rights?",
-            "es": "Me detuvieron en público - ¿cuáles son mis derechos?"
-          },
-          "answer": {
-            "en": "<p><strong>Your Constitutional Rights:</strong></p><ul><li>You have the right to remain silent</li><li>You do not have to answer questions about birthplace or how you entered the US</li><li>You can ask 'Am I free to leave?' - If yes, walk away calmly</li></ul><p><strong>What to Say:</strong></p><ul><li>'I am exercising my right to remain silent'</li><li>'I want to speak to an attorney'</li><li>'I do not consent to any searches'</li></ul><p><strong>What NOT to Do:</strong></p><ul><li>Don't run - this gives legal reason for arrest</li><li>Don't lie or provide false documents</li><li>Don't sign anything without a lawyer</li></ul>",
-            "es": "<p><strong>Sus Derechos Constitucionales:</strong></p><ul><li>Tiene derecho a permanecer en silencio</li><li>No tiene que responder preguntas sobre lugar de nacimiento o cómo entró a EE.UU.</li><li>Puede preguntar '¿Soy libre de irme?' - Si dicen sí, aléjese calmadamente</li></ul><p><strong>Qué Decir:</strong></p><ul><li>'Estoy ejerciendo mi derecho a permanecer en silencio'</li><li>'Quiero hablar con un abogado'</li><li>'No consiento ningún registro'</li></ul><p><strong>Qué NO Hacer:</strong></p><ul><li>No corra - esto da razón legal para arrestar</li><li>No mienta ni proporcione documentos falsos</li><li>No firme nada sin un abogado</li></ul>"
-          },
-          "tags": {
-            "en": ["stopped", "public", "rights", "ICE encounter", "street", "constitutional rights"],
-            "es": ["detenido", "público", "derechos", "encuentro con ICE", "calle", "derechos constitucionales"]
-          },
-          "relatedResources": ["nilc", "readyNow"]
-        }
-      ]
-    },
-    {
-      "id": "rights",
-      "icon": "⚖️",
-      "name": {
-        "en": "Know Your Rights",
-        "es": "Conozca Sus Derechos"
-      },
-      "description": {
-        "en": "Understanding your constitutional and legal rights",
-        "es": "Entendiendo sus derechos constitucionales y legales"
-      },
-      "faqs": [
-        {
-          "id": "warrant-types",
-          "priority": 2,
-          "question": {
-            "en": "What's the difference between ICE warrants and judicial warrants?",
-            "es": "¿Cuál es la diferencia entre órdenes de ICE y órdenes judiciales?"
-          },
-          "answer": {
-            "en": "<p><strong>Judicial Warrants (VALID for entry):</strong></p><ul><li>Signed by a federal JUDGE</li><li>Says 'U.S. District Court' at the top</li><li>Allows officers to enter your home</li></ul><p><strong>ICE Administrative Warrants (NOT valid for entry):</strong></p><ul><li>Forms I-200 or I-205</li><li>Signed by ICE officers, not judges</li><li>Do NOT authorize entry into homes</li><li>You can refuse entry with these warrants</li></ul><div class='alert-info'>Always ask to see the warrant through a window or have it slid under the door. Never open your door to check!</div>",
-            "es": "<p><strong>Órdenes Judiciales (VÁLIDAS para entrada):</strong></p><ul><li>Firmadas por un JUEZ federal</li><li>Dice 'U.S. District Court' en la parte superior</li><li>Permite a los oficiales entrar a su hogar</li></ul><p><strong>Órdenes Administrativas de ICE (NO válidas para entrada):</strong></p><ul><li>Formularios I-200 o I-205</li><li>Firmadas por oficiales de ICE, no jueces</li><li>NO autorizan entrada a hogares</li><li>Puede rechazar entrada con estas órdenes</li></ul><div class='alert-info'>¡Siempre pida ver la orden a través de una ventana o que la deslicen bajo la puerta. Nunca abra su puerta para verificar!</div>"
-          },
-          "tags": {
-            "en": ["warrant", "judicial", "administrative", "I-200", "I-205", "entry", "home"],
-            "es": ["orden", "judicial", "administrativa", "I-200", "I-205", "entrada", "hogar"]
-          },
-          "relatedResources": ["ilrc", "nilc"]
-        },
-        {
-          "id": "recording-rights",
-          "priority": 3,
-          "question": {
-            "en": "Can I record ICE agents?",
-            "es": "¿Puedo grabar a agentes de ICE?"
-          },
-          "answer": {
-            "en": "<p><strong>Yes, you have the right to record!</strong></p><ul><li>First Amendment protects recording government officials in public</li><li>You can record video and audio in public spaces</li><li>Officers cannot delete footage or seize phones without warrants</li></ul><p><strong>Best Practices:</strong></p><ul><li>Stay at safe distance - don't interfere</li><li>Livestream if possible (Facebook Live, Instagram)</li><li>Send video to trusted contact immediately</li><li>Note badge numbers, names, license plates</li></ul><p><strong>If witnessing an arrest:</strong></p><ul><li>Ask the person's name and emergency contacts</li><li>Tell them their rights loudly</li><li>Contact rapid response network</li></ul>",
-            "es": "<p><strong>¡Sí, tiene derecho a grabar!</strong></p><ul><li>La Primera Enmienda protege grabar a oficiales del gobierno en público</li><li>Puede grabar video y audio en espacios públicos</li><li>Los oficiales no pueden borrar grabaciones o confiscar teléfonos sin órdenes</li></ul><p><strong>Mejores Prácticas:</strong></p><ul><li>Manténgase a distancia segura - no interfiera</li><li>Transmita en vivo si es posible (Facebook Live, Instagram)</li><li>Envíe video a contacto de confianza inmediatamente</li><li>Anote números de placa, nombres, placas de vehículos</li></ul><p><strong>Si presencia un arresto:</strong></p><ul><li>Pregunte el nombre de la persona y contactos de emergencia</li><li>Dígales sus derechos en voz alta</li><li>Contacte la red de respuesta rápida</li></ul>"
-          },
-          "tags": {
-            "en": ["record", "video", "filming", "witness", "First Amendment", "public"],
-            "es": ["grabar", "video", "filmar", "testigo", "Primera Enmienda", "público"]
-          },
-          "relatedResources": ["rapidResponse"]
-        },
-        {
-          "id": "remain-silent",
-          "priority": 2,
-          "question": {
-            "en": "What does 'right to remain silent' mean?",
-            "es": "¿Qué significa el 'derecho a permanecer en silencio'?"
-          },
-          "answer": {
-            "en": "<p><strong>The Fifth Amendment protects you from self-incrimination:</strong></p><ul><li>You don't have to answer questions about your immigration status</li><li>You don't have to say where you were born</li><li>You don't have to discuss how you entered the US</li><li>You don't have to show documents unless legally required</li></ul><p><strong>How to use this right:</strong></p><ul><li>Say clearly: 'I am exercising my right to remain silent'</li><li>Then stop talking - even small talk can be used against you</li><li>You must verbally invoke this right - silence alone isn't enough</li><li>This applies to everyone regardless of immigration status</li></ul>",
-            "es": "<p><strong>La Quinta Enmienda lo protege de la autoincriminación:</strong></p><ul><li>No tiene que responder preguntas sobre su estatus migratorio</li><li>No tiene que decir dónde nació</li><li>No tiene que discutir cómo entró a EE.UU.</li><li>No tiene que mostrar documentos a menos que sea legalmente requerido</li></ul><p><strong>Cómo usar este derecho:</strong></p><ul><li>Diga claramente: 'Estoy ejerciendo mi derecho a permanecer en silencio'</li><li>Luego deje de hablar - incluso conversación casual puede usarse en su contra</li><li>Debe invocar este derecho verbalmente - el silencio solo no es suficiente</li><li>Esto aplica a todos sin importar el estatus migratorio</li></ul>"
-          },
-          "tags": {
-            "en": ["Fifth Amendment", "remain silent", "rights", "self-incrimination"],
-            "es": ["Quinta Enmienda", "permanecer en silencio", "derechos", "autoincriminación"]
-          },
-          "relatedResources": ["nilc"]
-        }
-      ]
-    },
-    {
-      "id": "family",
-      "icon": "👨‍👩‍👧‍👦",
-      "name": {
-        "en": "Family Safety Planning",
-        "es": "Planificación de Seguridad Familiar"
-      },
-      "description": {
-        "en": "Protecting your children and family if you face detention",
-        "es": "Protegiendo a sus hijos y familia si enfrenta detención"
-      },
-      "faqs": [
-        {
-          "id": "child-protection-documents",
-          "priority": 1,
-          "question": {
-            "en": "What legal documents do I need to protect my children?",
-            "es": "¿Qué documentos legales necesito para proteger a mis hijos?"
-          },
-          "answer": {
-            "en": "<p><strong>Essential Documents (Complete within 30 days):</strong></p><ul><li><strong>Power of Attorney:</strong> Allows someone to make decisions for your children</li><li><strong>Caregiver's Authorization Affidavit:</strong> For school and medical decisions</li><li><strong>Standby Guardianship:</strong> Takes effect if you're detained</li></ul><p><strong>State Variations:</strong></p><ul><li><strong>New Jersey:</strong> Power of Attorney expires every 6 months</li><li><strong>New York:</strong> Extended to 12 months, includes 'administrative separation'</li><li><strong>California:</strong> Three options available, verbal agreements maintain parental rights</li><li><strong>Maryland, NY, DC:</strong> Include 'adverse immigration action' provisions</li></ul><div class='alert-warning'>5.62 million U.S. citizen children are at risk of family separation. Act now to protect them.</div>",
-            "es": "<p><strong>Documentos Esenciales (Complete en 30 días):</strong></p><ul><li><strong>Poder Notarial:</strong> Permite a alguien tomar decisiones por sus hijos</li><li><strong>Declaración Jurada de Autorización del Cuidador:</strong> Para decisiones escolares y médicas</li><li><strong>Tutela de Reserva:</strong> Toma efecto si es detenido</li></ul><p><strong>Variaciones por Estado:</strong></p><ul><li><strong>Nueva Jersey:</strong> El Poder Notarial expira cada 6 meses</li><li><strong>Nueva York:</strong> Extendido a 12 meses, incluye 'separación administrativa'</li><li><strong>California:</strong> Tres opciones disponibles, acuerdos verbales mantienen derechos parentales</li><li><strong>Maryland, NY, DC:</strong> Incluyen provisiones de 'acción migratoria adversa'</li></ul><div class='alert-warning'>5.62 millones de niños ciudadanos estadounidenses están en riesgo de separación familiar. Actúe ahora para protegerlos.</div>"
-          },
-          "tags": {
-            "en": ["children", "power of attorney", "guardianship", "custody", "family plan", "legal documents"],
-            "es": ["hijos", "poder notarial", "tutela", "custodia", "plan familiar", "documentos legales"]
-          },
-          "relatedResources": ["iceParental", "ilrc"]
-        },
-        {
-          "id": "emergency-family-plan",
-          "priority": 1,
-          "question": {
-            "en": "How do I create an emergency family plan?",
-            "es": "¿Cómo creo un plan familiar de emergencia?"
-          },
-          "answer": {
-            "en": "<p><strong>Step 1: Choose Emergency Caregivers</strong></p><ul><li>Identify trusted adults with legal status</li><li>Discuss and get their consent</li><li>Share children's medical info, school contacts</li></ul><p><strong>Step 2: Organize Critical Documents</strong></p><ul><li>Birth certificates, passports, medical records</li><li>Make 3 copies: home, trusted person, cloud storage</li><li>Use encrypted storage: Sync.com or pCloud</li></ul><p><strong>Step 3: Financial Preparation</strong></p><ul><li>Open individual bank accounts (not joint)</li><li>Create UTMA accounts for children's expenses</li><li>Ensure emergency fund access for caregiver</li></ul><p><strong>Step 4: Communication Plan</strong></p><ul><li>Create code words for emergencies</li><li>Save ICE hotline: 1-888-351-4024</li><li>Program rapid response network</li></ul>",
-            "es": "<p><strong>Paso 1: Elegir Cuidadores de Emergencia</strong></p><ul><li>Identifique adultos de confianza con estatus legal</li><li>Discuta y obtenga su consentimiento</li><li>Comparta información médica de los niños, contactos escolares</li></ul><p><strong>Paso 2: Organizar Documentos Críticos</strong></p><ul><li>Certificados de nacimiento, pasaportes, registros médicos</li><li>Haga 3 copias: hogar, persona de confianza, almacenamiento en la nube</li><li>Use almacenamiento encriptado: Sync.com o pCloud</li></ul><p><strong>Paso 3: Preparación Financiera</strong></p><ul><li>Abra cuentas bancarias individuales (no conjuntas)</li><li>Cree cuentas UTMA para gastos de los niños</li><li>Asegure acceso al fondo de emergencia para el cuidador</li></ul><p><strong>Paso 4: Plan de Comunicación</strong></p><ul><li>Cree palabras clave para emergencias</li><li>Guarde línea directa de ICE: 1-888-351-4024</li><li>Programe red de respuesta rápida</li></ul>"
-          },
-          "tags": {
-            "en": ["emergency plan", "preparation", "family", "documents", "caregivers", "financial"],
-            "es": ["plan de emergencia", "preparación", "familia", "documentos", "cuidadores", "financiero"]
-          },
-          "relatedResources": ["ilrc", "iceParental"]
-        },
-        {
-          "id": "mixed-status-families",
-          "priority": 2,
-          "question": {
-            "en": "What special considerations exist for mixed-status families?",
-            "es": "¿Qué consideraciones especiales existen para familias de estatus mixto?"
-          },
-          "answer": {
-            "en": "<p><strong>Financial Protections:</strong></p><ul><li>U.S. citizen children keep Social Security survivor benefits</li><li>Children maintain eligibility for government programs</li><li>Avoid joint bank accounts to protect assets</li></ul><p><strong>Education Rights:</strong></p><ul><li>24 states + DC offer in-state tuition regardless of status</li><li>FAFSA 2025-26 allows parents without SSN to apply</li><li>Alternative state aid available in WA, VA, CA</li></ul><p><strong>Healthcare Access:</strong></p><ul><li>U.S. citizen children keep Medicaid/CHIP</li><li>Emergency Medicaid available regardless of status</li><li>WIC continues for eligible children</li></ul>",
-            "es": "<p><strong>Protecciones Financieras:</strong></p><ul><li>Niños ciudadanos mantienen beneficios de superviviente del Seguro Social</li><li>Los niños mantienen elegibilidad para programas gubernamentales</li><li>Evite cuentas bancarias conjuntas para proteger activos</li></ul><p><strong>Derechos Educativos:</strong></p><ul><li>24 estados + DC ofrecen matrícula estatal sin importar estatus</li><li>FAFSA 2025-26 permite a padres sin SSN aplicar</li><li>Ayuda estatal alternativa disponible en WA, VA, CA</li></ul><p><strong>Acceso a Salud:</strong></p><ul><li>Niños ciudadanos mantienen Medicaid/CHIP</li><li>Medicaid de emergencia disponible sin importar estatus</li><li>WIC continúa para niños elegibles</li></ul>"
-          },
-          "tags": {
-            "en": ["mixed status", "citizen children", "benefits", "education", "healthcare"],
-            "es": ["estatus mixto", "niños ciudadanos", "beneficios", "educación", "salud"]
-          },
-          "relatedResources": ["nilc"]
-        }
-      ]
-    },
-    {
-      "id": "workplace",
-      "icon": "💼",
-      "name": {
-        "en": "Workplace Rights",
-        "es": "Derechos Laborales"
-      },
-      "description": {
-        "en": "Your rights at work during ICE enforcement",
-        "es": "Sus derechos en el trabajo durante aplicación de ICE"
-      },
-      "faqs": [
-        {
-          "id": "ice-at-work",
-          "priority": 1,
-          "question": {
-            "en": "What should I do if ICE comes to my workplace?",
-            "es": "¿Qué debo hacer si ICE viene a mi lugar de trabajo?"
-          },
-          "answer": {
-            "en": "<p><strong>Immediate Response:</strong></p><ul><li>Stay calm - DO NOT RUN (gives legal reason for arrest)</li><li>Say: 'I am exercising my right to remain silent'</li><li>Say: 'I want to speak to an attorney'</li><li>Don't sign anything</li></ul><p><strong>Know Your Workspace:</strong></p><ul><li><strong>Private areas</strong> (break rooms, offices, kitchens) - ICE needs judicial warrant</li><li><strong>Public areas</strong> (retail floor, restaurant dining) - No warrant needed</li><li>Administrative warrants don't allow private area access</li></ul><p><strong>Your Rights Remain:</strong></p><ul><li>Right to final paycheck</li><li>Workers' compensation for injuries</li><li>Protection during DOL/EEOC investigations</li></ul>",
-            "es": "<p><strong>Respuesta Inmediata:</strong></p><ul><li>Mantenga la calma - NO CORRA (da razón legal para arresto)</li><li>Diga: 'Estoy ejerciendo mi derecho a permanecer en silencio'</li><li>Diga: 'Quiero hablar con un abogado'</li><li>No firme nada</li></ul><p><strong>Conozca Su Espacio de Trabajo:</strong></p><ul><li><strong>Áreas privadas</strong> (salas de descanso, oficinas, cocinas) - ICE necesita orden judicial</li><li><strong>Áreas públicas</strong> (piso de venta, comedor de restaurante) - No necesita orden</li><li>Órdenes administrativas no permiten acceso a áreas privadas</li></ul><p><strong>Sus Derechos Permanecen:</strong></p><ul><li>Derecho a cheque final</li><li>Compensación laboral por lesiones</li><li>Protección durante investigaciones DOL/EEOC</li></ul>"
-          },
-          "tags": {
-            "en": ["workplace", "ICE raid", "work", "employer", "rights at work"],
-            "es": ["lugar de trabajo", "redada de ICE", "trabajo", "empleador", "derechos laborales"]
-          },
-          "relatedResources": ["nilc", "readyNow"]
-        },
-        {
-          "id": "high-risk-industries",
-          "priority": 3,
-          "question": {
-            "en": "Which industries face the highest risk of ICE raids?",
-            "es": "¿Qué industrias enfrentan mayor riesgo de redadas de ICE?"
-          },
-          "answer": {
-            "en": "<p><strong>High-Risk Industries in 2025:</strong></p><ul><li><strong>Construction:</strong> 100+ detained in Florida, Home Depot parking lots targeted</li><li><strong>Hospitality:</strong> 25% revenue drops reported at some restaurants</li><li><strong>Agriculture:</strong> 30% capacity reductions, raids timed with harvests</li><li><strong>Meatpacking:</strong> Production down to 20% at some facilities</li></ul><p><strong>Risk Factors:</strong></p><ul><li>Cash-heavy businesses</li><li>Day labor sites</li><li>Industries with high undocumented worker percentages</li><li>Previous raid history</li></ul>",
-            "es": "<p><strong>Industrias de Alto Riesgo en 2025:</strong></p><ul><li><strong>Construcción:</strong> 100+ detenidos en Florida, estacionamientos de Home Depot objetivo</li><li><strong>Hospitalidad:</strong> Caídas del 25% en ingresos reportadas en algunos restaurantes</li><li><strong>Agricultura:</strong> Reducciones del 30% en capacidad, redadas cronometradas con cosechas</li><li><strong>Empacadoras de Carne:</strong> Producción baja al 20% en algunas instalaciones</li></ul><p><strong>Factores de Riesgo:</strong></p><ul><li>Negocios con mucho efectivo</li><li>Sitios de jornaleros</li><li>Industrias con alto porcentaje de trabajadores indocumentados</li><li>Historial previo de redadas</li></ul>"
-          },
-          "tags": {
-            "en": ["construction", "restaurant", "agriculture", "meatpacking", "high risk"],
-            "es": ["construcción", "restaurante", "agricultura", "empacadora", "alto riesgo"]
-          },
-          "relatedResources": []
-        },
-        {
-          "id": "employer-obligations",
-          "priority": 3,
-          "question": {
-            "en": "What are my employer's obligations during an ICE raid?",
-            "es": "¿Cuáles son las obligaciones de mi empleador durante una redada de ICE?"
-          },
-          "answer": {
-            "en": "<p><strong>Employers Cannot:</strong></p><ul><li>Grant consent for ICE to enter private areas without judicial warrant</li><li>Provide employee information without subpoena</li><li>Discriminate based on perceived immigration status</li><li>Retaliate against workers who assert rights</li></ul><p><strong>Employers Must:</strong></p><ul><li>Pay all wages owed regardless of status</li><li>Maintain workers' compensation coverage</li><li>Allow employees to leave if not under arrest</li><li>Provide reasonable time to respond to no-match letters (typically 90 days)</li></ul><p><strong>E-Verify States:</strong> AL, AZ, FL (25+ employees), GA (11+), MS, NC (25+), SC, TN (6+), UT (15+)</p>",
-            "es": "<p><strong>Los Empleadores No Pueden:</strong></p><ul><li>Dar consentimiento para que ICE entre a áreas privadas sin orden judicial</li><li>Proporcionar información de empleados sin citación</li><li>Discriminar basado en estatus migratorio percibido</li><li>Tomar represalias contra trabajadores que ejercen derechos</li></ul><p><strong>Los Empleadores Deben:</strong></p><ul><li>Pagar todos los salarios adeudados sin importar estatus</li><li>Mantener cobertura de compensación laboral</li><li>Permitir que empleados se vayan si no están bajo arresto</li><li>Proporcionar tiempo razonable para responder a cartas de no-coincidencia (típicamente 90 días)</li></ul><p><strong>Estados con E-Verify:</strong> AL, AZ, FL (25+ empleados), GA (11+), MS, NC (25+), SC, TN (6+), UT (15+)</p>"
-          },
-          "tags": {
-            "en": ["employer", "E-Verify", "no-match letter", "wages", "discrimination"],
-            "es": ["empleador", "E-Verify", "carta de no-coincidencia", "salarios", "discriminación"]
-          },
-          "relatedResources": []
-        }
-      ]
-    },
-    {
-      "id": "documents",
-      "icon": "📄",
-      "name": {
-        "en": "Documents & Status",
-        "es": "Documentos y Estatus"
-      },
-      "description": {
-        "en": "What documents to carry and protect based on your status",
-        "es": "Qué documentos llevar y proteger según su estatus"
-      },
-      "faqs": [
-        {
-          "id": "daily-documents",
-          "priority": 1,
-          "question": {
-            "en": "What documents should I carry daily based on my status?",
-            "es": "¿Qué documentos debo llevar diariamente según mi estatus?"
-          },
-          "answer": {
-            "en": "<p><strong>Green Card Holders:</strong></p><ul><li>Form I-551 (Permanent Resident Card) - MUST carry</li><li>Valid passport with ADIT stamp (if applicable)</li></ul><p><strong>Work Permit Holders:</strong></p><ul><li>Form I-766 (EAD card)</li><li>Government-issued photo ID</li></ul><p><strong>DACA Recipients:</strong></p><ul><li>Valid EAD card</li><li>REAL ID-compliant driver's license</li><li>Copy of DACA approval notice</li></ul><p><strong>TPS Holders:</strong></p><ul><li>EAD with A12 or C19 category</li><li>TPS approval notices</li></ul><p><strong>Undocumented Individuals:</strong></p><ul><li>Proof of 2+ years presence (copies, not originals)</li><li>Lease agreements, utility bills, tax returns</li><li>School enrollment, medical receipts</li></ul><div class='alert-danger'>Never carry false documents - automatic disqualification from all benefits</div>",
-            "es": "<p><strong>Portadores de Tarjeta Verde:</strong></p><ul><li>Formulario I-551 (Tarjeta de Residente Permanente) - DEBE llevar</li><li>Pasaporte válido con sello ADIT (si aplica)</li></ul><p><strong>Portadores de Permiso de Trabajo:</strong></p><ul><li>Formulario I-766 (tarjeta EAD)</li><li>ID con foto emitida por el gobierno</li></ul><p><strong>Beneficiarios DACA:</strong></p><ul><li>Tarjeta EAD válida</li><li>Licencia de conducir compatible con REAL ID</li><li>Copia de aviso de aprobación DACA</li></ul><p><strong>Portadores TPS:</strong></p><ul><li>EAD con categoría A12 o C19</li><li>Avisos de aprobación TPS</li></ul><p><strong>Individuos Indocumentados:</strong></p><ul><li>Prueba de presencia de 2+ años (copias, no originales)</li><li>Contratos de arrendamiento, facturas de servicios, declaraciones de impuestos</li><li>Inscripción escolar, recibos médicos</li></ul><div class='alert-danger'>Nunca lleve documentos falsos - descalificación automática de todos los beneficios</div>"
-          },
-          "tags": {
-            "en": ["documents", "papers", "green card", "DACA", "TPS", "work permit", "ID"],
-            "es": ["documentos", "papeles", "tarjeta verde", "DACA", "TPS", "permiso de trabajo", "identificación"]
-          },
-          "relatedResources": []
-        },
-        {
-          "id": "document-safety",
-          "priority": 2,
-          "question": {
-            "en": "How should I store and protect important documents?",
-            "es": "¿Cómo debo almacenar y proteger documentos importantes?"
-          },
-          "answer": {
-            "en": "<p><strong>Three-Copy Rule:</strong></p><ul><li>Original in fireproof safe at home</li><li>Copy with trusted family member/friend</li><li>Digital copy in encrypted cloud storage</li></ul><p><strong>Recommended Cloud Storage:</strong></p><ul><li>Sync.com - End-to-end encryption</li><li>pCloud - Zero-knowledge encryption</li><li>Internxt - Privacy-focused</li></ul><p><strong>Document Packet Should Include:</strong></p><ul><li>Birth certificates (all family members)</li><li>Passports</li><li>Marriage/divorce certificates</li><li>Immigration documents</li><li>Medical records</li><li>Property deeds/leases</li><li>Bank account information</li><li>Emergency contacts list</li></ul><p><strong>Access Instructions:</strong> Leave clear instructions with trusted person on how to access documents if you're detained</p>",
-            "es": "<p><strong>Regla de Tres Copias:</strong></p><ul><li>Original en caja fuerte a prueba de fuego en casa</li><li>Copia con familiar/amigo de confianza</li><li>Copia digital en almacenamiento encriptado en la nube</li></ul><p><strong>Almacenamiento en la Nube Recomendado:</strong></p><ul><li>Sync.com - Encriptación de extremo a extremo</li><li>pCloud - Encriptación de conocimiento cero</li><li>Internxt - Enfocado en privacidad</li></ul><p><strong>El Paquete de Documentos Debe Incluir:</strong></p><ul><li>Certificados de nacimiento (todos los miembros de la familia)</li><li>Pasaportes</li><li>Certificados de matrimonio/divorcio</li><li>Documentos de inmigración</li><li>Registros médicos</li><li>Escrituras/contratos de propiedad</li><li>Información de cuentas bancarias</li><li>Lista de contactos de emergencia</li></ul><p><strong>Instrucciones de Acceso:</strong> Deje instrucciones claras con persona de confianza sobre cómo acceder a documentos si es detenido</p>"
-          },
-          "tags": {
-            "en": ["document storage", "protection", "cloud", "copies", "safety"],
-            "es": ["almacenamiento de documentos", "protección", "nube", "copias", "seguridad"]
-          },
-          "relatedResources": []
-        },
-        {
-          "id": "real-id-travel",
-          "priority": 2,
-          "question": {
-            "en": "What ID do I need for domestic flights after REAL ID?",
-            "es": "¿Qué identificación necesito para vuelos domésticos después de REAL ID?"
-          },
-          "answer": {
-            "en": "<p><strong>REAL ID took effect May 7, 2025:</strong></p><ul><li>Non-compliant state IDs no longer accepted for domestic flights</li><li>TSA ended CBP One app acceptance February 24, 2025</li></ul><p><strong>Accepted Documents for Flying:</strong></p><ul><li>REAL ID-compliant driver's license (has star symbol)</li><li>Valid foreign passport (safest alternative)</li><li>U.S. passport or passport card</li><li>Permanent resident card</li><li>DHS trusted traveler cards (Global Entry, NEXUS)</li></ul><p><strong>Important Notes:</strong></p><ul><li>Foreign passports accepted but may trigger additional screening</li><li>TSA can still refer travelers to ICE</li><li>19 states allow driver's licenses for undocumented, but marked 'Not for Federal Purposes'</li></ul>",
-            "es": "<p><strong>REAL ID entró en vigor el 7 de mayo de 2025:</strong></p><ul><li>IDs estatales no conformes ya no se aceptan para vuelos domésticos</li><li>TSA terminó aceptación de app CBP One el 24 de febrero de 2025</li></ul><p><strong>Documentos Aceptados para Volar:</strong></p><ul><li>Licencia de conducir conforme con REAL ID (tiene símbolo de estrella)</li><li>Pasaporte extranjero válido (alternativa más segura)</li><li>Pasaporte estadounidense o tarjeta de pasaporte</li><li>Tarjeta de residente permanente</li><li>Tarjetas de viajero confiable DHS (Global Entry, NEXUS)</li></ul><p><strong>Notas Importantes:</strong></p><ul><li>Pasaportes extranjeros aceptados pero pueden provocar revisión adicional</li><li>TSA aún puede referir viajeros a ICE</li><li>19 estados permiten licencias para indocumentados, pero marcadas 'No para Propósitos Federales'</li></ul>"
-          },
-          "tags": {
-            "en": ["REAL ID", "flying", "domestic flight", "TSA", "passport", "travel"],
-            "es": ["REAL ID", "volar", "vuelo doméstico", "TSA", "pasaporte", "viajar"]
-          },
-          "relatedResources": []
-        }
-      ]
-    },
-    {
-      "id": "transportation",
-      "icon": "🚗",
-      "name": {
-        "en": "Transportation Safety",
-        "es": "Seguridad en Transporte"
-      },
-      "description": {
-        "en": "Safe travel and checkpoint navigation",
-        "es": "Viaje seguro y navegación de puntos de control"
-      },
-      "faqs": [
-        {
-          "id": "checkpoint-rights",
-          "priority": 2,
-          "question": {
-            "en": "What are my rights at immigration checkpoints?",
-            "es": "¿Cuáles son mis derechos en puntos de control de inmigración?"
-          },
-          "answer": {
-            "en": "<p><strong>Checkpoint Facts:</strong></p><ul><li>71 checkpoints operate (33 permanent, 38+ tactical)</li><li>Located within 100 miles of borders</li><li>Cover 2/3 of US population</li></ul><p><strong>Your Rights:</strong></p><ul><li>You can remain silent about immigration status</li><li>Initial stop doesn't require reasonable suspicion</li><li>Secondary inspection DOES require reasonable suspicion</li><li>You don't have to consent to vehicle searches</li></ul><p><strong>Major Checkpoint Locations:</strong></p><ul><li>California: I-5 at San Clemente</li><li>Texas: I-35 north of Laredo</li><li>Arizona: I-19 Tucson corridor</li></ul><p><strong>If Asked About Status:</strong></p><ul><li>You can say: 'I prefer to remain silent'</li><li>Don't lie - it's a federal crime</li><li>Have documents ready if choosing to show them</li></ul>",
-            "es": "<p><strong>Datos sobre Puntos de Control:</strong></p><ul><li>71 puntos de control operan (33 permanentes, 38+ tácticos)</li><li>Ubicados dentro de 100 millas de fronteras</li><li>Cubren 2/3 de la población de EE.UU.</li></ul><p><strong>Sus Derechos:</strong></p><ul><li>Puede permanecer en silencio sobre estatus migratorio</li><li>Parada inicial no requiere sospecha razonable</li><li>Inspección secundaria SÍ requiere sospecha razonable</li><li>No tiene que consentir a registros de vehículo</li></ul><p><strong>Ubicaciones Principales:</strong></p><ul><li>California: I-5 en San Clemente</li><li>Texas: I-35 norte de Laredo</li><li>Arizona: I-19 corredor de Tucson</li></ul><p><strong>Si Preguntan Sobre Estatus:</strong></p><ul><li>Puede decir: 'Prefiero permanecer en silencio'</li><li>No mienta - es un crimen federal</li><li>Tenga documentos listos si elige mostrarlos</li></ul>"
-          },
-          "tags": {
-            "en": ["checkpoint", "border", "100-mile zone", "secondary inspection"],
-            "es": ["punto de control", "frontera", "zona de 100 millas", "inspección secundaria"]
-          },
-          "relatedResources": []
-        },
-        {
-          "id": "transportation-safety-ranking",
-          "priority": 3,
-          "question": {
-            "en": "Which forms of transportation are safest from ICE?",
-            "es": "¿Qué formas de transporte son más seguras de ICE?"
-          },
-          "answer": {
-            "en": "<p><strong>Safety Ranking (Lowest to Highest Risk):</strong></p><ol><li><strong>Private vehicles:</strong> Requires valid state license, lowest exposure</li><li><strong>Rideshare (Uber/Lyft):</strong> Risk during traffic stops</li><li><strong>Greyhound buses:</strong> Company requires warrants for boarding</li><li><strong>Amtrak/rail:</strong> CBP boards in 100-mile zone</li><li><strong>Air travel:</strong> Requires federal ID, ICE presence at airports</li></ol><p><strong>Additional Considerations:</strong></p><ul><li>License plate readers track vehicles automatically</li><li>Florida criminalizes driving with certain out-of-state licenses</li><li>Wyoming imposes jail time starting July 2025</li><li>Facial recognition at 238 airports</li></ul>",
-            "es": "<p><strong>Clasificación de Seguridad (Menor a Mayor Riesgo):</strong></p><ol><li><strong>Vehículos privados:</strong> Requiere licencia estatal válida, menor exposición</li><li><strong>Transporte compartido (Uber/Lyft):</strong> Riesgo durante paradas de tráfico</li><li><strong>Autobuses Greyhound:</strong> Compañía requiere órdenes para abordar</li><li><strong>Amtrak/tren:</strong> CBP aborda en zona de 100 millas</li><li><strong>Viaje aéreo:</strong> Requiere ID federal, presencia de ICE en aeropuertos</li></ol><p><strong>Consideraciones Adicionales:</strong></p><ul><li>Lectores de placas rastrean vehículos automáticamente</li><li>Florida criminaliza conducir con ciertas licencias de otros estados</li><li>Wyoming impone cárcel comenzando julio 2025</li><li>Reconocimiento facial en 238 aeropuertos</li></ul>"
-          },
-          "tags": {
-            "en": ["transportation", "travel", "bus", "train", "airplane", "driving"],
-            "es": ["transporte", "viajar", "autobús", "tren", "avión", "conducir"]
-          },
-          "relatedResources": []
-        }
-      ]
-    },
-    {
-      "id": "financial",
-      "icon": "💰",
-      "name": {
-        "en": "Financial Protection",
-        "es": "Protección Financiera"
-      },
-      "description": {
-        "en": "Banking, assets, and financial safety",
-        "es": "Banca, activos y seguridad financiera"
-      },
-      "faqs": [
-        {
-          "id": "itin-banking",
-          "priority": 2,
-          "question": {
-            "en": "Which banks accept ITINs and are they safe?",
-            "es": "¿Qué bancos aceptan ITINs y son seguros?"
-          },
-          "answer": {
-            "en": "<p><strong>Major Banks Accepting ITINs:</strong></p><ul><li>Bank of America</li><li>Wells Fargo</li><li>Marcus by Goldman Sachs (4.25% APY savings)</li><li>Chase (limited branches)</li></ul><p><strong>Community Banks/Credit Unions:</strong></p><ul><li>Latino Community Credit Union (NC)</li><li>Point West Credit Union (Portland)</li><li>Juntos Avanzamos network (108 credit unions, 26 states)</li></ul><p><strong>Important Facts:</strong></p><ul><li>No federal mandate to freeze ITIN accounts</li><li>Avoid joint accounts if partner faces deportation risk</li><li>Use Power of Attorney for account access instead</li><li>Keep accounts under $250,000 for FDIC insurance</li></ul>",
-            "es": "<p><strong>Bancos Principales que Aceptan ITINs:</strong></p><ul><li>Bank of America</li><li>Wells Fargo</li><li>Marcus by Goldman Sachs (4.25% APY ahorros)</li><li>Chase (sucursales limitadas)</li></ul><p><strong>Bancos Comunitarios/Cooperativas de Crédito:</strong></p><ul><li>Latino Community Credit Union (NC)</li><li>Point West Credit Union (Portland)</li><li>Red Juntos Avanzamos (108 cooperativas, 26 estados)</li></ul><p><strong>Datos Importantes:</strong></p><ul><li>No hay mandato federal para congelar cuentas ITIN</li><li>Evite cuentas conjuntas si pareja enfrenta riesgo de deportación</li><li>Use Poder Notarial para acceso a cuenta</li><li>Mantenga cuentas bajo $250,000 para seguro FDIC</li></ul>"
-          },
-          "tags": {
-            "en": ["ITIN", "banking", "credit union", "accounts", "financial"],
-            "es": ["ITIN", "banca", "cooperativa de crédito", "cuentas", "financiero"]
-          },
-          "relatedResources": []
-        },
-        {
-          "id": "asset-protection",
-          "priority": 3,
-          "question": {
-            "en": "How can I protect property and assets if detained?",
-            "es": "¿Cómo puedo proteger propiedad y activos si soy detenido?"
-          },
-          "answer": {
-            "en": "<p><strong>LLC Formation:</strong></p><ul><li>No citizenship requirements</li><li>Separates personal liability from property</li><li>Best privacy: Delaware, Wyoming, Nevada</li><li>Process: Get ITIN → Form LLC → Get EIN → Open business account</li></ul><p><strong>Trust Options:</strong></p><ul><li>Revocable living trust maintains control during lifetime</li><li>'Deportation trusts' address specific needs</li><li>Designate US citizen/resident as successor trustee</li></ul><p><strong>Additional Protections:</strong></p><ul><li>Payable-on-death bank accounts</li><li>Transfer-on-death property deeds</li><li>Life insurance using ITIN</li><li>Clear beneficiary designations</li></ul>",
-            "es": "<p><strong>Formación de LLC:</strong></p><ul><li>Sin requisitos de ciudadanía</li><li>Separa responsabilidad personal de propiedad</li><li>Mejor privacidad: Delaware, Wyoming, Nevada</li><li>Proceso: Obtener ITIN → Formar LLC → Obtener EIN → Abrir cuenta comercial</li></ul><p><strong>Opciones de Fideicomiso:</strong></p><ul><li>Fideicomiso revocable mantiene control durante vida</li><li>'Fideicomisos de deportación' abordan necesidades específicas</li><li>Designar ciudadano/residente como fideicomisario sucesor</li></ul><p><strong>Protecciones Adicionales:</strong></p><ul><li>Cuentas bancarias pagaderas al fallecer</li><li>Escrituras de propiedad transferibles al fallecer</li><li>Seguro de vida usando ITIN</li><li>Designaciones claras de beneficiarios</li></ul>"
-          },
-          "tags": {
-            "en": ["LLC", "trust", "property", "assets", "protection"],
-            "es": ["LLC", "fideicomiso", "propiedad", "activos", "protección"]
-          },
-          "relatedResources": []
-        }
-      ]
-    },
-    {
-      "id": "healthcare",
-      "icon": "🏥",
-      "name": {
-        "en": "Healthcare Access",
-        "es": "Acceso a Salud"
-      },
-      "description": {
-        "en": "Medical care rights and resources",
-        "es": "Derechos y recursos de atención médica"
-      },
-      "faqs": [
-        {
-          "id": "emergency-medical-care",
-          "priority": 2,
-          "question": {
-            "en": "Can I get emergency medical care without insurance or status?",
-            "es": "¿Puedo obtener atención médica de emergencia sin seguro o estatus?"
-          },
-          "answer": {
-            "en": "<p><strong>Yes - Federal Law (EMTALA) Guarantees:</strong></p><ul><li>Emergency stabilization regardless of status</li><li>Labor and delivery care</li><li>Cannot be turned away for inability to pay</li></ul><p><strong>Emergency Medicaid Covers:</strong></p><ul><li>Emergency conditions</li><li>Labor/delivery (80% of Emergency Medicaid)</li><li>Does NOT cover follow-up care</li></ul><p><strong>How to Request Help:</strong></p><p>Say: 'I am uninsured and unable to pay. Do you have financial assistance programs?'</p><p><strong>Additional Resources:</strong></p><ul><li>Federally Qualified Health Centers: 1,400+ locations</li><li>Sliding scale fees based on income</li><li>No immigration status requirements</li><li>Find centers: findahealthcenter.hrsa.gov</li></ul>",
-            "es": "<p><strong>Sí - La Ley Federal (EMTALA) Garantiza:</strong></p><ul><li>Estabilización de emergencia sin importar estatus</li><li>Atención de parto</li><li>No pueden rechazarlo por incapacidad de pago</li></ul><p><strong>Medicaid de Emergencia Cubre:</strong></p><ul><li>Condiciones de emergencia</li><li>Parto (80% del Medicaid de Emergencia)</li><li>NO cubre atención de seguimiento</li></ul><p><strong>Cómo Solicitar Ayuda:</strong></p><p>Diga: 'No tengo seguro y no puedo pagar. ¿Tienen programas de asistencia financiera?'</p><p><strong>Recursos Adicionales:</strong></p><ul><li>Centros de Salud Calificados Federalmente: 1,400+ ubicaciones</li><li>Tarifas escalonadas según ingresos</li><li>Sin requisitos de estatus migratorio</li><li>Encuentre centros: findahealthcenter.hrsa.gov</li></ul>"
-          },
-          "tags": {
-            "en": ["emergency", "medical", "EMTALA", "hospital", "healthcare", "uninsured"],
-            "es": ["emergencia", "médico", "EMTALA", "hospital", "salud", "sin seguro"]
-          },
-          "relatedResources": []
-        },
-        {
-          "id": "chronic-conditions",
-          "priority": 3,
-          "question": {
-            "en": "How can I manage chronic conditions like diabetes or dialysis?",
-            "es": "¿Cómo puedo manejar condiciones crónicas como diabetes o diálisis?"
-          },
-          "answer": {
-            "en": "<p><strong>Dialysis Access:</strong></p><ul><li>12 states provide regular dialysis: CA, CO, IL, NY, WA, OR, NV, NM, CT, MA, MD, NC</li><li>Emergency-only dialysis has 14x higher mortality rate</li><li>Advocate for scheduled treatment as 'emergency prevention'</li></ul><p><strong>Medication Assistance:</strong></p><ul><li>Pharmaceutical company programs accept ITINs</li><li>RxAssist.org - comprehensive database</li><li>Generic programs: $4/month at major pharmacies</li><li>GoodRx - discounts without insurance</li></ul><p><strong>Chronic Disease Management:</strong></p><ul><li>FQHCs provide ongoing primary care</li><li>Sliding scale fees for uninsured</li><li>Diabetes, hypertension programs available</li><li>No status verification required</li></ul>",
-            "es": "<p><strong>Acceso a Diálisis:</strong></p><ul><li>12 estados proporcionan diálisis regular: CA, CO, IL, NY, WA, OR, NV, NM, CT, MA, MD, NC</li><li>Diálisis solo de emergencia tiene tasa de mortalidad 14x mayor</li><li>Abogue por tratamiento programado como 'prevención de emergencia'</li></ul><p><strong>Asistencia con Medicamentos:</strong></p><ul><li>Programas de compañías farmacéuticas aceptan ITINs</li><li>RxAssist.org - base de datos completa</li><li>Programas genéricos: $4/mes en farmacias principales</li><li>GoodRx - descuentos sin seguro</li></ul><p><strong>Manejo de Enfermedades Crónicas:</strong></p><ul><li>FQHCs proporcionan atención primaria continua</li><li>Tarifas escalonadas para no asegurados</li><li>Programas de diabetes, hipertensión disponibles</li><li>Sin verificación de estatus requerida</li></ul>"
-          },
-          "tags": {
-            "en": ["chronic", "diabetes", "dialysis", "medication", "FQHC"],
-            "es": ["crónico", "diabetes", "diálisis", "medicación", "FQHC"]
-          },
-          "relatedResources": []
-        }
-      ]
-    },
-    {
-      "id": "legal",
-      "icon": "⚖️",
-      "name": {
-        "en": "Legal Defense",
-        "es": "Defensa Legal"
-      },
-      "description": {
-        "en": "Deportation defense and legal options",
-        "es": "Defensa contra deportación y opciones legales"
-      },
-      "faqs": [
-        {
-          "id": "find-detained-person",
-          "priority": 1,
-          "question": {
-            "en": "How do I find someone who was detained by ICE?",
-            "es": "¿Cómo encuentro a alguien detenido por ICE?"
-          },
-          "answer": {
-            "en": "<p><strong>ICE Online Detainee Locator:</strong></p><ul><li>Website: locator.ice.gov</li><li>Need: A-Number OR name + country of birth + date of birth</li><li>Shows: Custody status and facility location</li><li>Updates: Within 24 hours of booking</li></ul><p><strong>If Not Found Online:</strong></p><ul><li>Call ICE ERO: 1-888-351-4024</li><li>Contact local ICE field office</li><li>Check county jails (initial 48-72 hours)</li><li>Contact consulate for help</li></ul><p><strong>Important Notes:</strong></p><ul><li>Some detainees not listed for security reasons</li><li>Juveniles not in public database</li><li>May take 24-48 hours to appear</li></ul>",
-            "es": "<p><strong>Localizador de Detenidos de ICE en Línea:</strong></p><ul><li>Sitio web: locator.ice.gov</li><li>Necesita: Número A O nombre + país de nacimiento + fecha de nacimiento</li><li>Muestra: Estado de custodia y ubicación de instalación</li><li>Actualizaciones: Dentro de 24 horas de ingreso</li></ul><p><strong>Si No Se Encuentra en Línea:</strong></p><ul><li>Llame a ICE ERO: 1-888-351-4024</li><li>Contacte oficina local de ICE</li><li>Revise cárceles del condado (primeras 48-72 horas)</li><li>Contacte consulado para ayuda</li></ul><p><strong>Notas Importantes:</strong></p><ul><li>Algunos detenidos no listados por razones de seguridad</li><li>Menores no en base de datos pública</li><li>Puede tomar 24-48 horas en aparecer</li></ul>"
-          },
-          "tags": {
-            "en": ["detained", "find", "locate", "ICE custody", "detention"],
-            "es": ["detenido", "encontrar", "localizar", "custodia ICE", "detención"]
-          },
-          "relatedResources": ["iceParental"]
-        },
-        {
-          "id": "deportation-defense-options",
-          "priority": 2,
-          "question": {
-            "en": "What are my options to fight deportation?",
-            "es": "¿Cuáles son mis opciones para luchar contra la deportación?"
-          },
-          "answer": {
-            "en": "<p><strong>Cancellation of Removal:</strong></p><ul><li>LPR: 5 years resident, 7 years presence, no aggravated felony</li><li>Non-LPR: 10 years presence, good moral character, exceptional hardship to US citizen/LPR family</li><li>Success rates: LPR 65-75%, Non-LPR 25-35%</li></ul><p><strong>Asylum/Withholding/CAT:</strong></p><ul><li>Asylum: File within 1 year, persecution based on protected ground</li><li>Withholding: Higher burden (51%+ probability) but no deadline</li><li>CAT: Protection from torture, no protected ground needed</li></ul><p><strong>Other Options:</strong></p><ul><li>Adjustment of status (if eligible)</li><li>Prosecutorial discretion</li><li>U visa (crime victims)</li><li>T visa (trafficking victims)</li></ul><p><strong>Critical:</strong> Having an attorney makes you 10.5x more likely to win</p>",
-            "es": "<p><strong>Cancelación de Remoción:</strong></p><ul><li>LPR: 5 años residente, 7 años presencia, sin delito agravado</li><li>No-LPR: 10 años presencia, buen carácter moral, dificultad excepcional para familiar ciudadano/LPR</li><li>Tasas de éxito: LPR 65-75%, No-LPR 25-35%</li></ul><p><strong>Asilo/Suspensión/CAT:</strong></p><ul><li>Asilo: Presentar dentro de 1 año, persecución basada en motivo protegido</li><li>Suspensión: Mayor carga (51%+ probabilidad) pero sin fecha límite</li><li>CAT: Protección contra tortura, no necesita motivo protegido</li></ul><p><strong>Otras Opciones:</strong></p><ul><li>Ajuste de estatus (si elegible)</li><li>Discreción fiscal</li><li>Visa U (víctimas de crimen)</li><li>Visa T (víctimas de tráfico)</li></ul><p><strong>Crítico:</strong> Tener abogado le hace 10.5x más probable ganar</p>"
-          },
-          "tags": {
-            "en": ["deportation", "cancellation", "asylum", "defense", "immigration court"],
-            "es": ["deportación", "cancelación", "asilo", "defensa", "corte de inmigración"]
-          },
-          "relatedResources": ["nilc"]
-        }
-      ]
-    },
-    {
-      "id": "special",
-      "icon": "🛡️",
-      "name": {
-        "en": "Special Populations",
-        "es": "Poblaciones Especiales"
-      },
-      "description": {
-        "en": "Specific protections for vulnerable groups",
-        "es": "Protecciones específicas para grupos vulnerables"
-      },
-      "faqs": [
-        {
-          "id": "domestic-violence-protections",
-          "priority": 2,
-          "question": {
-            "en": "What immigration protections exist for domestic violence survivors?",
-            "es": "¿Qué protecciones migratorias existen para sobrevivientes de violencia doméstica?"
-          },
-          "answer": {
-            "en": "<p><strong>VAWA Self-Petition:</strong></p><ul><li>No filing fee required</li><li>180-day target processing</li><li>Confidentiality protections prevent info sharing with abuser</li><li>Covers spouse and children</li></ul><p><strong>U Visa:</strong></p><ul><li>For crime victims who cooperate with law enforcement</li><li>10,000 annual cap (always reached)</li><li>Work authorization available</li><li>Path to green card</li></ul><p><strong>Emergency Resources:</strong></p><ul><li>National DV Hotline: 1-800-799-7233</li><li>Shelter access regardless of status</li><li>Confidential services available</li><li>No immigration enforcement at DV shelters</li></ul><div class='alert-info'>Your information is protected under 8 U.S.C. § 1367 and cannot be shared with ICE</div>",
-            "es": "<p><strong>Auto-Petición VAWA:</strong></p><ul><li>Sin tarifa de presentación</li><li>Procesamiento objetivo de 180 días</li><li>Protecciones de confidencialidad previenen compartir información con abusador</li><li>Cubre cónyuge e hijos</li></ul><p><strong>Visa U:</strong></p><ul><li>Para víctimas de crimen que cooperan con la ley</li><li>Límite anual de 10,000 (siempre alcanzado)</li><li>Autorización de trabajo disponible</li><li>Camino a tarjeta verde</li></ul><p><strong>Recursos de Emergencia:</strong></p><ul><li>Línea Nacional VD: 1-800-799-7233</li><li>Acceso a refugio sin importar estatus</li><li>Servicios confidenciales disponibles</li><li>Sin aplicación migratoria en refugios VD</li></ul><div class='alert-info'>Su información está protegida bajo 8 U.S.C. § 1367 y no puede compartirse con ICE</div>"
-          },
-          "tags": {
-            "en": ["domestic violence", "VAWA", "U visa", "abuse", "protection"],
-            "es": ["violencia doméstica", "VAWA", "visa U", "abuso", "protección"]
-          },
-          "relatedResources": ["domesticViolence"]
-        },
-        {
-          "id": "lgbtq-asylum",
-          "priority": 3,
-          "question": {
-            "en": "What protections exist for LGBTQ+ immigrants?",
-            "es": "¿Qué protecciones existen para inmigrantes LGBTQ+?"
-          },
-          "answer": {
-            "en": "<p><strong>Asylum Based on LGBTQ+ Identity:</strong></p><ul><li>Sexual orientation and gender identity are protected grounds</li><li>Must show persecution in home country</li><li>Same-sex marriages fully recognized since 2013</li></ul><p><strong>Detention Considerations:</strong></p><ul><li>Case-by-case placement for transgender individuals</li><li>Safety and dignity considerations required</li><li>Medical care must be continued</li></ul><p><strong>HIV+ Status:</strong></p><ul><li>Not grounds for inadmissibility since 2010</li><li>Ryan White Program provides care regardless of status</li><li>Cannot be deported solely for HIV status</li></ul><p><strong>Resources:</strong></p><ul><li>Immigration Equality: 212-714-2904</li><li>Specialized legal services available</li></ul>",
-            "es": "<p><strong>Asilo Basado en Identidad LGBTQ+:</strong></p><ul><li>Orientación sexual e identidad de género son motivos protegidos</li><li>Debe mostrar persecución en país de origen</li><li>Matrimonios del mismo sexo reconocidos desde 2013</li></ul><p><strong>Consideraciones de Detención:</strong></p><ul><li>Colocación caso por caso para personas transgénero</li><li>Se requieren consideraciones de seguridad y dignidad</li><li>Atención médica debe continuar</li></ul><p><strong>Estatus VIH+:</strong></p><ul><li>No es motivo de inadmisibilidad desde 2010</li><li>Programa Ryan White proporciona atención sin importar estatus</li><li>No puede ser deportado solo por estatus VIH</li></ul><p><strong>Recursos:</strong></p><ul><li>Immigration Equality: 212-714-2904</li><li>Servicios legales especializados disponibles</li></ul>"
-          },
-          "tags": {
-            "en": ["LGBTQ", "transgender", "asylum", "HIV", "same-sex marriage"],
-            "es": ["LGBTQ", "transgénero", "asilo", "VIH", "matrimonio mismo sexo"]
-          },
-          "relatedResources": []
-        },
-        {
-          "id": "unaccompanied-minors",
-          "priority": 2,
-          "question": {
-            "en": "What protections exist for unaccompanied children?",
-            "es": "¿Qué protecciones existen para niños no acompañados?"
-          },
-          "answer": {
-            "en": "<p><strong>Flores Settlement Requirements:</strong></p><ul><li>20-day maximum detention in licensed facilities</li><li>Least restrictive environment required</li><li>Extended through July 2026</li></ul><p><strong>Legal Protections:</strong></p><ul><li>Right to full hearing (not expedited removal)</li><li>Special Immigrant Juvenile Status available</li><li>Must be placed with family when possible</li></ul><p><strong>Critical Statistics:</strong></p><ul><li>56% have legal representation</li><li>90%+ removal rate without attorney</li><li>60%+ positive outcome with attorney</li></ul><p><strong>Resources:</strong></p><ul><li>KIND (Kids in Need of Defense)</li><li>Legal services partially restored after cuts</li><li>Pro bono representation available</li></ul>",
-            "es": "<p><strong>Requisitos del Acuerdo Flores:</strong></p><ul><li>Detención máxima de 20 días en instalaciones licenciadas</li><li>Se requiere ambiente menos restrictivo</li><li>Extendido hasta julio 2026</li></ul><p><strong>Protecciones Legales:</strong></p><ul><li>Derecho a audiencia completa (no remoción expedita)</li><li>Estatus Especial de Joven Inmigrante disponible</li><li>Debe ser colocado con familia cuando sea posible</li></ul><p><strong>Estadísticas Críticas:</strong></p><ul><li>56% tienen representación legal</li><li>90%+ tasa de remoción sin abogado</li><li>60%+ resultado positivo con abogado</li></ul><p><strong>Recursos:</strong></p><ul><li>KIND (Niños que Necesitan Defensa)</li><li>Servicios legales parcialmente restaurados después de cortes</li><li>Representación pro bono disponible</li></ul>"
-          },
-          "tags": {
-            "en": ["children", "unaccompanied", "Flores", "SIJS", "minors"],
-            "es": ["niños", "no acompañados", "Flores", "SIJS", "menores"]
-          },
-          "relatedResources": []
-        }
-      ]
-    }
-  ],
-  
-  "quickActions": [
-    {
-      "id": "readynow",
-      "type": "app",
-      "icon": "📱",
-      "priority": 1,
-      "label": {
-        "en": "Get ReadyNow App",
-        "es": "Obtener ReadyNow"
-      },
-      "action": "detectDevice",
-      "color": "urgent"
-    },
-    {
-      "id": "eligibility",
-      "type": "external",
-      "icon": "✅",
-      "priority": 2,
-      "label": {
-        "en": "Check Eligibility",
-        "es": "Verificar Elegibilidad"
-      },
-      "action": "https://www.immi.org/en",
-      "color": "primary"
-    },
-    {
-      "id": "hotline",
-      "type": "phone",
-      "icon": "📞",
-      "priority": 1,
-      "label": {
-        "en": "ICE Parent Hotline",
-        "es": "Línea de Padres ICE"
-      },
-      "action": "tel:1-888-351-4024",
-      "color": "primary"
-    },
-    {
-      "id": "legal",
-      "type": "external",
-      "icon": "⚖️",
-      "priority": 2,
-      "label": {
-        "en": "Legal Help",
-        "es": "Ayuda Legal"
-      },
-      "action": "https://www.nilc.org/resources/",
-      "color": "primary"
-    }
-  ],
-  
-  "filterChips": [
-    {
-      "id": "all",
-      "label": {
-        "en": "All Topics",
-        "es": "Todos los Temas"
-      },
-      "icon": null
-    },
-    {
-      "id": "urgent",
-      "label": {
-        "en": "Urgent",
-        "es": "Urgente"
-      },
-      "icon": "🚨"
-    },
-    {
-      "id": "rights",
-      "label": {
-        "en": "Know Your Rights",
-        "es": "Conozca Sus Derechos"
-      },
-      "icon": null
-    },
-    {
-      "id": "family",
-      "label": {
-        "en": "Family Safety",
-        "es": "Seguridad Familiar"
-      },
-      "icon": null
-    },
-    {
-      "id": "workplace",
-      "label": {
-        "en": "Workplace",
-        "es": "Trabajo"
-      },
-      "icon": null
-    },
-    {
-      "id": "documents",
-      "label": {
-        "en": "Documents",
-        "es": "Documentos"
-      },
-      "icon": null
-    }
-  ]
-}
+</html>
