@@ -515,9 +515,7 @@
 
         .sphere-popover.mobile-active {
             position: fixed;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
+            transform: none;
             width: min(420px, calc(100vw - 2.5rem));
             max-height: calc(100vh - 3rem);
             padding: 1.5rem;
@@ -2769,6 +2767,8 @@
 
             if (!popover) return;
 
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
             popover.classList.remove('mobile-active');
             document.body.classList.remove('popover-open');
             popover.style.left = '';
@@ -2776,15 +2776,43 @@
             popover.style.width = '';
             popover.style.transform = '';
 
-            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            if (!element) {
+                return;
+            }
 
             if (isMobile) {
                 popover.classList.add('mobile-active');
                 document.body.classList.add('popover-open');
+
+                const rect = element.getBoundingClientRect();
+                const viewportWidth = window.innerWidth;
+                const viewportHeight = window.innerHeight;
+                const popoverWidth = Math.min(360, viewportWidth - 32);
+                popover.style.width = `${popoverWidth}px`;
+
+                const popoverHeight = popover.offsetHeight || 320;
+
+                let left = rect.left + rect.width / 2 - popoverWidth / 2;
+                left = Math.max(16, Math.min(left, viewportWidth - popoverWidth - 16));
+
+                let top = rect.bottom + 16;
+
+                if (top + popoverHeight > viewportHeight - 16) {
+                    top = rect.top - popoverHeight - 16;
+                }
+
+                if (top < 16) {
+                    top = 16;
+                }
+
+                popover.style.left = `${left}px`;
+                popover.style.top = `${top}px`;
+                popover.style.transform = 'none';
+
                 return;
             }
 
-            if (!element || !container) {
+            if (!container) {
                 return;
             }
 
