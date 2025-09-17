@@ -109,7 +109,9 @@
       "shareViaWhatsApp": "Share via WhatsApp",
       "getApp": "Get Emergency App",
       "checkEligibility": "Check Eligibility",
-      "legalHelp": "Legal Help"
+      "legalHelp": "Legal Help",
+      "phoneDesktopPrompt": "Call this number from your phone:",
+      "phoneCopied": "Number copied to clipboard."
     },
     "es": {
       "title": "Guía de Seguridad Migratoria 2025",
@@ -121,7 +123,9 @@
       "shareViaWhatsApp": "Compartir por WhatsApp",
       "getApp": "Obtener App de Emergencia",
       "checkEligibility": "Verificar Elegibilidad",
-      "legalHelp": "Ayuda Legal"
+      "legalHelp": "Ayuda Legal",
+      "phoneDesktopPrompt": "Llame a este número desde su teléfono:",
+      "phoneCopied": "Número copiado al portapapeles."
     }
   },
   
