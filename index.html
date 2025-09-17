@@ -905,116 +905,159 @@
             border-top: 1px solid var(--border-light);
         }
 
-        /* Podcast Player */
-        .podcast-player {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
-            z-index: 998;
-            border: 1px solid var(--border-light);
-            width: 320px;
-            transition: all 0.3s ease;
+        /* Podcast */
+        .podcast-section {
+            background: linear-gradient(135deg, rgba(184, 92, 78, 0.05), rgba(124, 152, 133, 0.08));
         }
-        
-        .podcast-player.minimized {
-            width: 60px;
-            height: 60px;
+
+        .podcast-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .podcast-intro h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .podcast-intro p {
+            color: var(--medium-gray);
+        }
+
+        .podcast-features {
+            margin-top: 2rem;
+            display: grid;
+            gap: 1rem;
             padding: 0;
-            border-radius: 50%;
-            overflow: hidden;
+            list-style: none;
         }
-        
+
+        .podcast-features li {
+            list-style: none;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .podcast-features li::before {
+            content: '✦';
+            color: var(--primary-rust);
+            font-size: 1rem;
+        }
+
+        .podcast-player {
+            position: relative;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            max-width: 480px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .podcast-player.minimized {
+            padding: 1rem 1.5rem;
+        }
+
         .podcast-player.minimized .player-content {
             display: none;
         }
-        
+
         .podcast-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            gap: 1rem;
         }
-        
+
         .podcast-title {
             font-family: 'Space Mono', monospace;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--primary-rust);
         }
-        
+
         .minimize-btn {
             background: transparent;
-            border: none;
+            border: 1px solid transparent;
             cursor: pointer;
             color: var(--medium-gray);
-            font-size: 1.2rem;
-            width: 30px;
-            height: 30px;
+            font-size: 1.1rem;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             transition: all 0.3s ease;
         }
-        
+
         .minimize-btn:hover {
-            background: var(--light-cream);
+            border-color: var(--primary-rust);
+            color: var(--primary-rust);
             transform: rotate(180deg);
         }
-        
+
         .podcast-player.minimized .minimize-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            font-size: 1.8rem;
             background: var(--primary-rust);
             color: white;
+            border-color: var(--primary-rust);
+            transform: none;
         }
-        
+
+        .podcast-player.minimized .minimize-btn:hover {
+            transform: none;
+            filter: brightness(1.05);
+        }
+
         .episode-selector {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
         }
-        
+
         .episode-btn {
             flex: 1;
-            padding: 0.5rem;
+            padding: 0.85rem 1rem;
             background: var(--light-cream);
             border: 1px solid var(--border-light);
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
-        
+
         .episode-btn.active {
             background: var(--primary-sage);
             color: white;
             border-color: var(--primary-sage);
+            box-shadow: 0 10px 30px rgba(124, 152, 133, 0.3);
         }
-        
+
         .episode-btn:hover:not(.active) {
             background: white;
             border-color: var(--primary-sage);
         }
-        
+
         .audio-controls {
-            margin-top: 1rem;
+            margin-top: 1.5rem;
         }
-        
+
         .audio-controls audio {
             width: 100%;
-            border-radius: 8px;
+            border-radius: 12px;
         }
         
         /* Accessibility Bar adjustment */
@@ -1147,6 +1190,7 @@
     <nav class="nav hidden" id="nav">
         <div class="nav-header" data-en="Navigate" data-es="Navegar">Navigate</div>
         <a href="#intro" class="nav-item" data-en="Introduction" data-es="Introducción">Introduction</a>
+        <a href="#podcast" class="nav-item" data-en="Audio Guide" data-es="Guía de Audio">Audio Guide</a>
         <a href="#hierarchy" class="nav-item" data-en="Value Hierarchy" data-es="Jerarquía de Valores">Value Hierarchy</a>
         <a href="#spheres" class="nav-item" data-en="Nine Spheres" data-es="Nueve Esferas">Nine Spheres</a>
         <a href="#hidden" class="nav-item" data-en="Hidden Support" data-es="Apoyo Oculto">Hidden Support</a>
@@ -1169,25 +1213,6 @@
         <button onclick="toggleReadingMode()" title="Reading mode">📖</button>
     </div>
 
-    <!-- Podcast Player -->
-    <div class="podcast-player" id="podcastPlayer">
-        <div class="podcast-header">
-            <span class="podcast-title" data-en="AUDIO GUIDE" data-es="GUÍA DE AUDIO">AUDIO GUIDE</span>
-            <button class="minimize-btn" onclick="togglePlayerSize()">⊟</button>
-        </div>
-        <div class="player-content">
-            <div class="episode-selector">
-                <button class="episode-btn active" onclick="selectEpisode('5min')" data-en="5 min intro" data-es="Intro 5 min">5 min intro</button>
-                <button class="episode-btn" onclick="selectEpisode('30min')" data-en="30 min deep dive" data-es="30 min completo">30 min deep dive</button>
-            </div>
-            <div class="audio-controls">
-                <audio id="audioPlayer" controls>
-                    <source src="https://storage.googleapis.com/intelechia-content/im/The%20Value%20Evolution%20Framework_%20Strategic%20Communication%205min.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
-            </div>
-        </div>
-    </div>
 
     <!-- Hero Section -->
     <section class="hero" id="intro">
@@ -1249,6 +1274,42 @@
             
             <div class="hero-visual">
                 <img src="https://storage.googleapis.com/intelechia-content/im/hand%20holding%20parent%20child.png" alt="Parent and child holding hands">
+            </div>
+        </div>
+    </section>
+
+    <!-- Podcast Section -->
+    <section class="section fade-in podcast-section" id="podcast">
+        <div class="container">
+            <div class="section-badge" data-en="Audio Companion" data-es="Compañero de Audio">Audio Companion</div>
+            <div class="podcast-layout">
+                <div class="podcast-intro">
+                    <h2 class="display-2" data-en="Listen as You Explore" data-es="Escucha mientras exploras">Listen as You Explore</h2>
+                    <p data-en="Keep the strategic story in your ear as you move through the framework. The audio companion mirrors the narrative on the page so you can absorb, review, and share without losing your place." data-es="Mantén la historia estratégica en tu oído mientras recorres el marco. El compañero de audio refleja la narrativa de la página para que puedas absorber, repasar y compartir sin perder el hilo.">Keep the strategic story in your ear as you move through the framework. The audio companion mirrors the narrative on the page so you can absorb, review, and share without losing your place.</p>
+                    <ul class="podcast-features">
+                        <li data-en="Choose between a 5-minute primer or a 30-minute deep dive." data-es="Elige entre un resumen de 5 minutos o un análisis de 30 minutos.">Choose between a 5-minute primer or a 30-minute deep dive.</li>
+                        <li data-en="Minimize the player and keep listening while you scroll." data-es="Minimiza el reproductor y sigue escuchando mientras navegas.">Minimize the player and keep listening while you scroll.</li>
+                        <li data-en="Language toggles keep the labeling in sync across the experience." data-es="Los cambios de idioma mantienen las etiquetas sincronizadas en toda la experiencia.">Language toggles keep the labeling in sync across the experience.</li>
+                    </ul>
+                </div>
+                <div class="podcast-player" id="podcastPlayer">
+                    <div class="podcast-header">
+                        <span class="podcast-title" data-en="AUDIO GUIDE" data-es="GUÍA DE AUDIO">AUDIO GUIDE</span>
+                        <button class="minimize-btn" onclick="togglePlayerSize()">⊟</button>
+                    </div>
+                    <div class="player-content">
+                        <div class="episode-selector">
+                            <button class="episode-btn active" onclick="selectEpisode('5min')" data-en="5 min intro" data-es="Intro 5 min">5 min intro</button>
+                            <button class="episode-btn" onclick="selectEpisode('30min')" data-en="30 min deep dive" data-es="30 min completo">30 min deep dive</button>
+                        </div>
+                        <div class="audio-controls">
+                            <audio id="audioPlayer" controls>
+                                <source src="https://storage.googleapis.com/intelechia-content/im/The%20Value%20Evolution%20Framework_%20Strategic%20Communication%205min.mp3" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
