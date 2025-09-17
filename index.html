@@ -1214,6 +1214,27 @@
     </div>
 
 
+    <!-- Podcast Player -->
+    <div class="podcast-player minimized" id="podcastPlayer">
+        <div class="podcast-header">
+            <span class="podcast-title" data-en="AUDIO GUIDE" data-es="GUÍA DE AUDIO">AUDIO GUIDE</span>
+            <button class="minimize-btn" onclick="togglePlayerSize()">▶</button>
+        </div>
+        <div class="player-content">
+            <div class="episode-selector">
+                <button class="episode-btn active" onclick="selectEpisode('5min')" data-en="5 min intro" data-es="Intro 5 min">5 min intro</button>
+                <button class="episode-btn" onclick="selectEpisode('30min')" data-en="30 min deep dive" data-es="30 min completo">30 min deep dive</button>
+            </div>
+            <div class="audio-controls">
+                <audio id="audioPlayer" controls>
+                    <source src="https://storage.googleapis.com/intelechia-content/im/The%20Value%20Evolution%20Framework_%20Strategic%20Communication%205min.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Hero Section -->
     <section class="hero" id="intro">
         <div class="hero-grid">
