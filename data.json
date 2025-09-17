@@ -31,6 +31,30 @@
         "name": {
           "en": "ICE Parental Interests Hotline",
           "es": "Línea de Intereses Parentales de ICE"
+        },
+        "tagline": {
+          "en": "Support for parents with children in ICE custody",
+          "es": "Apoyo para padres con hijos bajo custodia de ICE"
+        },
+        "description": {
+          "en": "This hotline is run by ICE to help parents and guardians locate or stay connected with their children during immigration custody or separation.",
+          "es": "Esta línea es administrada por ICE para ayudar a padres y tutores a ubicar o mantenerse en contacto con sus hijos durante la custodia o separación migratoria."
+        },
+        "details": {
+          "en": [
+            "Ask about the location and well-being of a detained child.",
+            "Request help scheduling visitation, phone calls, or video calls.",
+            "Report issues with parental rights, family separation, or care plans."
+          ],
+          "es": [
+            "Pregunte sobre la ubicación y el bienestar de un niño detenido.",
+            "Solicite ayuda para programar visitas, llamadas telefónicas o videollamadas.",
+            "Reporte problemas con los derechos parentales, separación familiar o planes de cuidado."
+          ]
+        },
+        "hours": {
+          "en": "Open daily from 8 a.m. – 8 p.m. Eastern Time",
+          "es": "Abierto todos los días de 8 a.m. a 8 p.m. hora del Este"
         }
       },
       "rapidResponse": {
@@ -111,7 +135,13 @@
       "checkEligibility": "Check Eligibility",
       "legalHelp": "Legal Help",
       "phoneDesktopPrompt": "Call this number from your phone:",
-      "phoneCopied": "Number copied to clipboard."
+      "phoneCopied": "Number copied to clipboard.",
+      "callNow": "Call Now",
+      "copyNumber": "Copy Number",
+      "hotlineHelps": "How this hotline helps",
+      "phoneLabel": "Phone",
+      "emailLabel": "Email",
+      "hoursLabel": "Hours"
     },
     "es": {
       "title": "Guía de Seguridad Migratoria 2025",
@@ -125,7 +155,13 @@
       "checkEligibility": "Verificar Elegibilidad",
       "legalHelp": "Ayuda Legal",
       "phoneDesktopPrompt": "Llame a este número desde su teléfono:",
-      "phoneCopied": "Número copiado al portapapeles."
+      "phoneCopied": "Número copiado al portapapeles.",
+      "callNow": "Llamar ahora",
+      "copyNumber": "Copiar número",
+      "hotlineHelps": "Cómo ayuda esta línea",
+      "phoneLabel": "Teléfono",
+      "emailLabel": "Correo electrónico",
+      "hoursLabel": "Horario"
     }
   },
   
@@ -749,7 +785,8 @@
         "es": "Línea de Padres ICE"
       },
       "action": "tel:1-888-351-4024",
-      "color": "primary"
+      "color": "primary",
+      "hotlineId": "iceParental"
     },
     {
       "id": "legal",

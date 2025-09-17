@@ -130,13 +130,11 @@
         }
 
         .quick-actions {
-            display: flex;
-            gap: 10px;
-            padding: 15px;
-            background: #f3f4f6;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            padding: 20px;
+            background: rgba(243, 244, 246, 0.85);
         }
 
         .quick-actions::-webkit-scrollbar {
@@ -145,47 +143,63 @@
 
         .action-btn {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
-            padding: 10px 15px;
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 20px;
-            white-space: nowrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 18px 12px;
+            min-height: 130px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,250,252,0.9) 100%);
+            border-radius: 28px;
+            border: none;
+            box-shadow: 0 15px 30px rgba(15,23,42,0.12);
+            white-space: normal;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
             text-decoration: none;
-            color: #374151;
+            color: #1f2937;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
-        .action-btn:hover {
-            border-color: #2563eb;
-            background: #eff6ff;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.15);
+        .action-btn:hover,
+        .action-btn:focus-visible {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 20px 38px rgba(15,23,42,0.18);
+        }
+
+        .action-btn:focus-visible {
+            outline: 3px solid rgba(37,99,235,0.45);
+            outline-offset: 4px;
         }
 
         .action-btn.urgent {
-            background: #fee2e2;
-            border-color: #dc2626;
-            color: #dc2626;
-        }
-
-        .action-btn.urgent:hover {
-            background: #dc2626;
+            background: linear-gradient(135deg, #f97316 0%, #dc2626 100%);
             color: white;
+            box-shadow: 0 18px 34px rgba(220,38,38,0.35);
         }
 
         .action-btn.primary {
-            border-color: #2563eb;
-            color: #2563eb;
+            background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
+            color: white;
+            box-shadow: 0 18px 34px rgba(37,99,235,0.25);
         }
 
-        .action-btn.primary:hover {
-            background: #2563eb;
-            color: white;
+        .action-icon {
+            font-size: 2rem;
+            line-height: 1;
+            filter: drop-shadow(0 6px 12px rgba(15,23,42,0.18));
+        }
+
+        .action-btn.urgent .action-icon,
+        .action-btn.primary .action-icon {
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
+        }
+
+        .action-label {
+            font-size: 13px;
+            line-height: 1.3;
+            text-align: center;
         }
 
         .filter-chips {
@@ -419,6 +433,214 @@
             font-size: 12px;
             margin-top: 10px;
         }
+
+        .hotline-modal {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(15,23,42,0.55);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 500;
+        }
+
+        .hotline-modal.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-panel {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 24px;
+            width: min(480px, 100%);
+            box-shadow: 0 30px 60px rgba(15,23,42,0.25);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(148,163,184,0.15);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 20px;
+            color: #475569;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus-visible {
+            background: rgba(148,163,184,0.35);
+            transform: scale(1.05);
+            outline: none;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .modal-icon {
+            font-size: 36px;
+            background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
+            color: white;
+            border-radius: 18px;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(37,99,235,0.3);
+        }
+
+        .modal-header h2 {
+            font-size: 1.1rem;
+            color: #0f172a;
+            font-weight: 700;
+        }
+
+        .modal-header p {
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .modal-body {
+            color: #1f2937;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .modal-body p {
+            margin-bottom: 16px;
+        }
+
+        .modal-contact {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .modal-contact-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 14px;
+            background: #f1f5f9;
+        }
+
+        .modal-contact-label {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .modal-contact-value {
+            color: #2563eb;
+            font-weight: 600;
+            text-decoration: none;
+            word-break: break-word;
+        }
+
+        .modal-section {
+            margin-bottom: 18px;
+        }
+
+        .modal-section h3 {
+            font-size: 0.95rem;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+
+        .modal-highlights {
+            list-style: disc;
+            margin-left: 20px;
+            color: #475569;
+        }
+
+        .modal-highlights li + li {
+            margin-top: 6px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            border: none;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .modal-primary {
+            background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
+            color: white;
+            box-shadow: 0 12px 24px rgba(37,99,235,0.25);
+        }
+
+        .modal-secondary {
+            background: #e2e8f0;
+            color: #1f2937;
+        }
+
+        .modal-actions button:hover:not(:disabled),
+        .modal-actions button:focus-visible:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(15,23,42,0.16);
+            outline: none;
+        }
+
+        .modal-actions button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        @media (max-width: 480px) {
+            .quick-actions {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+                padding: 16px;
+            }
+
+            .action-btn {
+                min-height: 120px;
+            }
+
+            .modal-panel {
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            .modal-header {
+                align-items: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
@@ -453,6 +675,44 @@
         </div>
     </div>
 
+    <div class="hotline-modal" id="hotlineModal" aria-hidden="true">
+        <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="hotlineModalTitle">
+            <button type="button" class="modal-close" id="hotlineModalClose" aria-label="Close">&times;</button>
+            <div class="modal-header">
+                <div class="modal-icon">📞</div>
+                <div>
+                    <h2 id="hotlineModalTitle"></h2>
+                    <p id="hotlineModalSubtitle" style="display:none;"></p>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p id="hotlineModalDescription" style="display:none;"></p>
+                <div class="modal-contact">
+                    <div class="modal-contact-row" id="hotlineModalNumberRow">
+                        <span class="modal-contact-label" id="hotlineModalNumberLabel">Phone</span>
+                        <a href="#" class="modal-contact-value" id="hotlineModalNumber"></a>
+                    </div>
+                    <div class="modal-contact-row" id="hotlineModalEmailRow" style="display:none;">
+                        <span class="modal-contact-label" id="hotlineModalEmailLabel">Email</span>
+                        <a href="#" class="modal-contact-value" id="hotlineModalEmail"></a>
+                    </div>
+                    <div class="modal-contact-row" id="hotlineModalHoursRow" style="display:none;">
+                        <span class="modal-contact-label" id="hotlineModalHoursLabel">Hours</span>
+                        <span class="modal-contact-value" id="hotlineModalHours"></span>
+                    </div>
+                </div>
+                <div class="modal-section" id="hotlineModalHighlightsSection" style="display:none;">
+                    <h3 id="hotlineModalHighlightsTitle"></h3>
+                    <ul class="modal-highlights" id="hotlineModalHighlights"></ul>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="modal-secondary" id="hotlineModalCopy"></button>
+                <button type="button" class="modal-primary" id="hotlineModalCall"></button>
+            </div>
+        </div>
+    </div>
+
     <div class="bottom-bar">
         <a href="#" class="bottom-btn emergency" id="bottomAppButton">📱 Get Emergency App</a>
         <button type="button" class="bottom-btn" id="bottomShareButton">📤 Share This</button>
@@ -465,6 +725,7 @@
         let currentLanguage = 'en';
         let currentFilter = 'all';
         let searchMinLength = 2;
+        let hotlineModalState = { phoneLink: '', label: '', number: '', hotlineId: '' };
 
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -474,6 +735,7 @@
             document.getElementById('bottomShareButton').addEventListener('click', shareWidget);
             document.getElementById('bottomAppButton').addEventListener('click', event => getReadyNowApp(event, 'readyNow'));
 
+            setupHotlineModal();
             loadData();
         });
 
@@ -519,6 +781,11 @@
             updateStaticText();
             renderQuickActions();
             renderFilterChips();
+
+            const hotlineModal = document.getElementById('hotlineModal');
+            if (hotlineModal && hotlineModal.classList.contains('visible') && hotlineModalState.hotlineId) {
+                showHotlineModal(hotlineModalState.hotlineId, hotlineModalState.phoneLink, hotlineModalState.label);
+            }
 
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
@@ -703,7 +970,16 @@
                 }
 
                 const label = action.label?.[currentLanguage] || action.label?.[fallbackLang] || '';
-                button.innerHTML = `${action.icon ? `${action.icon} ` : ''}<span>${label}</span>`;
+                const iconSpan = document.createElement('span');
+                iconSpan.className = 'action-icon';
+                iconSpan.textContent = action.icon || 'ℹ️';
+
+                const labelSpan = document.createElement('span');
+                labelSpan.className = 'action-label';
+                labelSpan.textContent = label;
+
+                button.appendChild(iconSpan);
+                button.appendChild(labelSpan);
 
                 if (action.type === 'app' && action.action === 'detectDevice') {
                     button.href = '#';
@@ -718,7 +994,10 @@
                     } else {
                         button.setAttribute('aria-label', label);
                     }
-                    button.addEventListener('click', event => handlePhoneAction(event, action.action, label));
+                    if (action.hotlineId) {
+                        button.dataset.hotlineId = action.hotlineId;
+                    }
+                    button.addEventListener('click', event => handlePhoneAction(event, action, label));
                 } else {
                     button.href = action.action || '#';
                     if (action.type === 'external') {
@@ -731,11 +1010,24 @@
             });
         }
 
-        function handlePhoneAction(event, phoneLink, label = '') {
+        function handlePhoneAction(event, action, label = '') {
             if (event) {
                 event.preventDefault();
             }
 
+            if (!action || !action.action) {
+                return;
+            }
+
+            if (action.hotlineId) {
+                showHotlineModal(action.hotlineId, action.action, label);
+                return;
+            }
+
+            processPhoneLink(action.action, label);
+        }
+
+        function processPhoneLink(phoneLink, label = '') {
             if (!phoneLink) {
                 return;
             }
@@ -755,20 +1047,232 @@
             if (phoneNumber && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
                 navigator.clipboard.writeText(phoneNumber)
                     .then(() => {
-                        alert(`${promptMessage} ${phoneNumber}\n${copiedMessage}`);
+                        alert(`${promptMessage} ${phoneNumber}\n${copiedMessage}`.trim());
                     })
                     .catch(() => {
-                        alert(`${promptMessage} ${phoneNumber}`);
+                        alert(`${promptMessage} ${phoneNumber}`.trim());
                     });
                 return;
             }
 
             const message = phoneNumber ? `${promptMessage} ${phoneNumber}` : promptMessage;
             if (label && !phoneNumber) {
-                alert(`${label}\n${message}`);
+                alert(`${label}\n${message}`.trim());
             } else {
-                alert(message);
+                alert(message.trim());
             }
+        }
+
+        function showHotlineModal(hotlineId, phoneLink, label = '') {
+            const modal = document.getElementById('hotlineModal');
+            if (!modal) {
+                processPhoneLink(phoneLink, label);
+                return;
+            }
+
+            const info = appData.config?.hotlines?.[hotlineId];
+            if (!info) {
+                processPhoneLink(phoneLink, label);
+                return;
+            }
+
+            const fallbackLang = appData.metadata?.defaultLanguage || 'en';
+            const translations = appData.uiTranslations?.[currentLanguage] || appData.uiTranslations?.en || {};
+
+            const name = info.name?.[currentLanguage] || info.name?.[fallbackLang] || label || '';
+            const tagline = info.tagline?.[currentLanguage] || info.tagline?.[fallbackLang] || '';
+            const description = info.description?.[currentLanguage] || info.description?.[fallbackLang] || '';
+            const details = info.details?.[currentLanguage] || info.details?.[fallbackLang] || [];
+            const hours = info.hours?.[currentLanguage] || info.hours?.[fallbackLang] || '';
+            const email = info.email || '';
+            const phoneNumber = (phoneLink || '').replace(/^tel:/i, '').trim();
+
+            hotlineModalState = {
+                phoneLink,
+                label: name || label,
+                number: phoneNumber,
+                hotlineId
+            };
+
+            const titleEl = document.getElementById('hotlineModalTitle');
+            if (titleEl) {
+                titleEl.textContent = name;
+            }
+
+            const subtitleEl = document.getElementById('hotlineModalSubtitle');
+            if (subtitleEl) {
+                subtitleEl.textContent = tagline;
+                subtitleEl.style.display = tagline ? 'block' : 'none';
+            }
+
+            const descriptionEl = document.getElementById('hotlineModalDescription');
+            if (descriptionEl) {
+                descriptionEl.textContent = description;
+                descriptionEl.style.display = description ? 'block' : 'none';
+            }
+
+            const numberRow = document.getElementById('hotlineModalNumberRow');
+            if (numberRow) {
+                numberRow.style.display = phoneNumber ? 'flex' : 'none';
+            }
+
+            const numberLabelEl = document.getElementById('hotlineModalNumberLabel');
+            if (numberLabelEl) {
+                numberLabelEl.textContent = translations.phoneLabel || 'Phone';
+            }
+
+            const numberEl = document.getElementById('hotlineModalNumber');
+            if (numberEl) {
+                numberEl.textContent = phoneNumber || label || '';
+                numberEl.href = phoneLink || '#';
+                numberEl.style.display = phoneNumber ? 'inline-flex' : 'none';
+            }
+
+            const emailRow = document.getElementById('hotlineModalEmailRow');
+            if (emailRow) {
+                emailRow.style.display = email ? 'flex' : 'none';
+            }
+
+            const emailLabelEl = document.getElementById('hotlineModalEmailLabel');
+            if (emailLabelEl) {
+                emailLabelEl.textContent = translations.emailLabel || 'Email';
+            }
+
+            const emailEl = document.getElementById('hotlineModalEmail');
+            if (emailEl) {
+                emailEl.textContent = email;
+                emailEl.href = email ? `mailto:${email}` : '#';
+            }
+
+            const hoursRow = document.getElementById('hotlineModalHoursRow');
+            if (hoursRow) {
+                hoursRow.style.display = hours ? 'flex' : 'none';
+            }
+
+            const hoursLabelEl = document.getElementById('hotlineModalHoursLabel');
+            if (hoursLabelEl) {
+                hoursLabelEl.textContent = translations.hoursLabel || 'Hours';
+            }
+
+            const hoursEl = document.getElementById('hotlineModalHours');
+            if (hoursEl) {
+                hoursEl.textContent = hours;
+            }
+
+            const highlightsSection = document.getElementById('hotlineModalHighlightsSection');
+            const highlightsTitle = document.getElementById('hotlineModalHighlightsTitle');
+            const highlightsList = document.getElementById('hotlineModalHighlights');
+
+            if (highlightsSection && highlightsTitle && highlightsList) {
+                if (Array.isArray(details) && details.length > 0) {
+                    highlightsSection.style.display = 'block';
+                    highlightsTitle.textContent = translations.hotlineHelps || 'How this hotline helps';
+                    highlightsList.innerHTML = '';
+                    details.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        highlightsList.appendChild(li);
+                    });
+                } else {
+                    highlightsSection.style.display = 'none';
+                    highlightsList.innerHTML = '';
+                }
+            }
+
+            const copyBtn = document.getElementById('hotlineModalCopy');
+            if (copyBtn) {
+                copyBtn.textContent = translations.copyNumber || 'Copy Number';
+                copyBtn.disabled = !phoneNumber;
+            }
+
+            const callBtn = document.getElementById('hotlineModalCall');
+            if (callBtn) {
+                callBtn.textContent = translations.callNow || 'Call Now';
+                callBtn.disabled = !phoneLink;
+            }
+
+            modal.classList.add('visible');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+
+            const focusTarget = (callBtn && !callBtn.disabled) ? callBtn : (copyBtn && !copyBtn.disabled ? copyBtn : null);
+            if (focusTarget) {
+                setTimeout(() => focusTarget.focus(), 50);
+            }
+        }
+
+        function hideHotlineModal() {
+            const modal = document.getElementById('hotlineModal');
+            if (!modal) {
+                return;
+            }
+
+            modal.classList.remove('visible');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+            hotlineModalState = { phoneLink: '', label: '', number: '', hotlineId: '' };
+        }
+
+        function copyHotlineNumber() {
+            if (!hotlineModalState.number) {
+                return;
+            }
+
+            const translations = appData.uiTranslations?.[currentLanguage] || appData.uiTranslations?.en || {};
+            const copiedMessage = translations.phoneCopied || 'Number copied to clipboard.';
+            const promptMessage = translations.phoneDesktopPrompt || 'Call this number from your phone:';
+
+            if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                navigator.clipboard.writeText(hotlineModalState.number)
+                    .then(() => {
+                        alert(`${copiedMessage}\n${hotlineModalState.number}`.trim());
+                    })
+                    .catch(() => {
+                        alert(`${promptMessage} ${hotlineModalState.number}`.trim());
+                    });
+            } else {
+                alert(`${promptMessage} ${hotlineModalState.number}`.trim());
+            }
+        }
+
+        function setupHotlineModal() {
+            const modal = document.getElementById('hotlineModal');
+            if (!modal) {
+                return;
+            }
+
+            const closeBtn = document.getElementById('hotlineModalClose');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', hideHotlineModal);
+            }
+
+            modal.addEventListener('click', event => {
+                if (event.target === modal) {
+                    hideHotlineModal();
+                }
+            });
+
+            const callBtn = document.getElementById('hotlineModalCall');
+            if (callBtn) {
+                callBtn.addEventListener('click', () => {
+                    if (!hotlineModalState.phoneLink) {
+                        return;
+                    }
+                    hideHotlineModal();
+                    processPhoneLink(hotlineModalState.phoneLink, hotlineModalState.label);
+                });
+            }
+
+            const copyBtn = document.getElementById('hotlineModalCopy');
+            if (copyBtn) {
+                copyBtn.addEventListener('click', copyHotlineNumber);
+            }
+
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape' && modal.classList.contains('visible')) {
+                    hideHotlineModal();
+                }
+            });
         }
 
         function renderFilterChips() {
