@@ -708,6 +708,17 @@
                 if (action.type === 'app' && action.action === 'detectDevice') {
                     button.href = '#';
                     button.addEventListener('click', event => getReadyNowApp(event, action.id));
+                } else if (action.type === 'phone') {
+                    button.href = action.action || '#';
+                    const phoneNumber = (action.action || '').replace(/^tel:/i, '').trim();
+                    if (phoneNumber) {
+                        button.dataset.phoneNumber = phoneNumber;
+                        button.title = `${label} ${phoneNumber}`.trim();
+                        button.setAttribute('aria-label', `${label} ${phoneNumber}`.trim());
+                    } else {
+                        button.setAttribute('aria-label', label);
+                    }
+                    button.addEventListener('click', event => handlePhoneAction(event, action.action, label));
                 } else {
                     button.href = action.action || '#';
                     if (action.type === 'external') {
@@ -718,6 +729,46 @@
 
                 container.appendChild(button);
             });
+        }
+
+        function handlePhoneAction(event, phoneLink, label = '') {
+            if (event) {
+                event.preventDefault();
+            }
+
+            if (!phoneLink) {
+                return;
+            }
+
+            const phoneNumber = phoneLink.replace(/^tel:/i, '').trim();
+            const translations = appData.uiTranslations?.[currentLanguage] || appData.uiTranslations?.en || {};
+            const promptMessage = translations.phoneDesktopPrompt || 'Call this number from your phone:';
+            const copiedMessage = translations.phoneCopied || 'Number copied to clipboard.';
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera || '';
+            const isMobileDevice = /Mobi|Android|iPhone|iPad|iPod/.test(userAgent);
+
+            if (isMobileDevice) {
+                window.location.href = phoneLink;
+                return;
+            }
+
+            if (phoneNumber && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                navigator.clipboard.writeText(phoneNumber)
+                    .then(() => {
+                        alert(`${promptMessage} ${phoneNumber}\n${copiedMessage}`);
+                    })
+                    .catch(() => {
+                        alert(`${promptMessage} ${phoneNumber}`);
+                    });
+                return;
+            }
+
+            const message = phoneNumber ? `${promptMessage} ${phoneNumber}` : promptMessage;
+            if (label && !phoneNumber) {
+                alert(`${label}\n${message}`);
+            } else {
+                alert(message);
+            }
         }
 
         function renderFilterChips() {
