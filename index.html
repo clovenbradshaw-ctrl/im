@@ -315,31 +315,95 @@
         .hero-purpose h2 {
             color: var(--primary-rust);
             font-size: 1.8rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0;
+        }
+
+        .tactical-brief {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 1.5rem;
+            align-items: start;
+        }
+
+        .tactical-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .tactical-summary p {
+            margin-bottom: 0;
+        }
+
+        .tactical-summary p + p {
+            margin-top: -0.25rem;
+        }
+
+        .tactical-pillars {
+            position: relative;
+            background: linear-gradient(145deg, rgba(184, 92, 78, 0.12), rgba(124, 152, 133, 0.18));
+            border-radius: 18px;
+            padding: 2.25rem;
+            border: 1px solid rgba(184, 92, 78, 0.18);
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            overflow: hidden;
+        }
+
+        .tactical-pillars::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(255, 217, 61, 0.32), transparent 55%);
+            pointer-events: none;
+            opacity: 0.9;
+        }
+
+        .tactical-pillars > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .pillars-kicker {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--primary-clay);
+            background: rgba(255, 255, 255, 0.68);
+            padding: 0.4rem 0.85rem;
+            border-radius: 999px;
+            align-self: flex-start;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
         }
 
         .tactical-goals {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
         .goal-card {
-            background: var(--light-cream);
-            padding: 1.5rem;
-            border-left: 4px solid var(--primary-sage);
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.86);
+            padding: 1.35rem 1.6rem;
+            border-left: 4px solid transparent;
+            border-radius: 12px;
+            border-image: linear-gradient(180deg, var(--primary-sage), var(--accent-sky)) 1;
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(6px);
         }
 
         .goal-card h3 {
-            font-size: 1rem;
-            color: var(--primary-sage);
-            margin: 0 0 0.5rem 0;
+            font-size: 1.05rem;
+            color: var(--primary-rust);
+            margin: 0 0 0.35rem 0;
         }
 
         .goal-card p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin: 0;
             color: var(--medium-gray);
         }
@@ -1174,6 +1238,14 @@
                 height: 40vh;
                 order: -1;
             }
+
+            .tactical-brief {
+                gap: 2rem;
+            }
+
+            .tactical-pillars {
+                padding: 2rem;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1196,6 +1268,14 @@
 
             .hero-content {
                 padding: 2.5rem 1.75rem;
+            }
+
+            .tactical-brief {
+                grid-template-columns: 1fr;
+            }
+
+            .tactical-pillars {
+                padding: 1.9rem;
             }
 
             .circles-container {
@@ -1243,8 +1323,12 @@
         }
 
         @media (max-width: 640px) {
-            .tactical-goals {
-                grid-template-columns: 1fr;
+            .tactical-pillars {
+                padding: 1.6rem;
+            }
+
+            .goal-card {
+                padding: 1.15rem 1.3rem;
             }
 
             .hero-content {
@@ -1379,25 +1463,31 @@
                     <p data-en="The strategic reality: Sustainable immigration reform requires either overwhelming political dominance we don't have, or value evolution in communities that currently oppose us. Since we lack the numbers for dominance, evolution becomes our only path to lasting victory."
                        data-es="La realidad estratégica: La reforma migratoria sostenible requiere o un dominio político abrumador que no tenemos, o una evolución de valores en las comunidades que actualmente se oponen a nosotros. Como carecemos de los números para el dominio, la evolución se convierte en nuestro único camino hacia la victoria duradera.">The strategic reality: Sustainable immigration reform requires either overwhelming political dominance we don't have, or value evolution in communities that currently oppose us. Since we lack the numbers for dominance, evolution becomes our only path to lasting victory.</p>
                     
-                    <h2 data-en="Our Tactical Purpose" data-es="Nuestro Propósito Táctico">Our Tactical Purpose</h2>
-                    <p data-en="This framework provides a strategic approach to immigration advocacy that achieves immediate policy wins while laying groundwork for long-term value evolution. We're not trying to reinforce conservative frameworks or pretend all moral positions are equal." 
-                       data-es="Este marco proporciona un enfoque estratégico para la defensa de la inmigración que logra victorias políticas inmediatas mientras sienta las bases para la evolución de valores a largo plazo. No estamos tratando de reforzar marcos conservadores o pretender que todas las posiciones morales son iguales.">This framework provides a strategic approach to immigration advocacy that achieves immediate policy wins while laying groundwork for long-term value evolution. We're not trying to reinforce conservative frameworks or pretend all moral positions are equal.</p>
-                    
-                    <p data-en="Instead, we're recognizing a critical tactical reality: conservatives already hold values that logically support immigrant rights—they just haven't made the connection yet. By revealing these hidden contradictions, we can achieve immediate victories while creating pathways for broader moral development."
-                       data-es="En cambio, estamos reconociendo una realidad táctica crítica: los conservadores ya tienen valores que lógicamente apoyan los derechos de los inmigrantes—simplemente no han hecho la conexión todavía. Al revelar estas contradicciones ocultas, podemos lograr victorias inmediatas mientras creamos caminos para un desarrollo moral más amplio.">Instead, we're recognizing a critical tactical reality: <strong>conservatives already hold values that logically support immigrant rights—they just haven't made the connection yet.</strong> By revealing these hidden contradictions, we can achieve immediate victories while creating pathways for broader moral development.</p>
+                    <div class="tactical-brief">
+                        <div class="tactical-summary">
+                            <h2 data-en="Our Tactical Purpose" data-es="Nuestro Propósito Táctico">Our Tactical Purpose</h2>
+                            <p data-en="This framework provides a strategic approach to immigration advocacy that achieves immediate policy wins while laying groundwork for long-term value evolution. We're not trying to reinforce conservative frameworks or pretend all moral positions are equal."
+                               data-es="Este marco proporciona un enfoque estratégico para la defensa de la inmigración que logra victorias políticas inmediatas mientras sienta las bases para la evolución de valores a largo plazo. No estamos tratando de reforzar marcos conservadores o pretender que todas las posiciones morales son iguales.">This framework provides a strategic approach to immigration advocacy that achieves immediate policy wins while laying groundwork for long-term value evolution. We're not trying to reinforce conservative frameworks or pretend all moral positions are equal.</p>
 
-                    <div class="tactical-goals">
-                        <div class="goal-card">
-                            <h3 data-en="Immediate Win" data-es="Victoria Inmediata">Immediate Win</h3>
-                            <p data-en="Use existing conservative values to support pro-immigrant policies" data-es="Usar valores conservadores existentes para apoyar políticas pro-inmigrantes">Use existing conservative values to support pro-immigrant policies</p>
+                            <p data-en="Instead, we're recognizing a critical tactical reality: conservatives already hold values that logically support immigrant rights—they just haven't made the connection yet. By revealing these hidden contradictions, we can achieve immediate victories while creating pathways for broader moral development."
+                               data-es="En cambio, estamos reconociendo una realidad táctica crítica: los conservadores ya tienen valores que lógicamente apoyan los derechos de los inmigrantes—simplemente no han hecho la conexión todavía. Al revelar estas contradicciones ocultas, podemos lograr victorias inmediatas mientras creamos caminos para un desarrollo moral más amplio.">Instead, we're recognizing a critical tactical reality: <strong>conservatives already hold values that logically support immigrant rights—they just haven't made the connection yet.</strong> By revealing these hidden contradictions, we can achieve immediate victories while creating pathways for broader moral development.</p>
                         </div>
-                        <div class="goal-card">
-                            <h3 data-en="Avoid Reinforcement" data-es="Evitar Reforzamiento">Avoid Reinforcement</h3>
-                            <p data-en="Never strengthen narrow moral frameworks or exclusionary thinking" data-es="Nunca fortalecer marcos morales estrechos o pensamientos excluyentes">Never strengthen narrow moral frameworks or exclusionary thinking</p>
-                        </div>
-                        <div class="goal-card">
-                            <h3 data-en="Create Evolution" data-es="Crear Evolución">Create Evolution</h3>
-                            <p data-en="Build bridges that naturally lead to expanded circles of moral concern" data-es="Construir puentes que naturalmente lleven a círculos expandidos de preocupación moral">Build bridges that naturally lead to expanded circles of moral concern</p>
+                        <div class="tactical-pillars">
+                            <span class="pillars-kicker" data-en="Strategic Focus" data-es="Enfoque Estratégico">Strategic Focus</span>
+                            <div class="tactical-goals">
+                                <div class="goal-card">
+                                    <h3 data-en="Immediate Win" data-es="Victoria Inmediata">Immediate Win</h3>
+                                    <p data-en="Use existing conservative values to support pro-immigrant policies" data-es="Usar valores conservadores existentes para apoyar políticas pro-inmigrantes">Use existing conservative values to support pro-immigrant policies</p>
+                                </div>
+                                <div class="goal-card">
+                                    <h3 data-en="Avoid Reinforcement" data-es="Evitar Reforzamiento">Avoid Reinforcement</h3>
+                                    <p data-en="Never strengthen narrow moral frameworks or exclusionary thinking" data-es="Nunca fortalecer marcos morales estrechos o pensamientos excluyentes">Never strengthen narrow moral frameworks or exclusionary thinking</p>
+                                </div>
+                                <div class="goal-card">
+                                    <h3 data-en="Create Evolution" data-es="Crear Evolución">Create Evolution</h3>
+                                    <p data-en="Build bridges that naturally lead to expanded circles of moral concern" data-es="Construir puentes que naturalmente lleven a círculos expandidos de preocupación moral">Build bridges that naturally lead to expanded circles of moral concern</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
