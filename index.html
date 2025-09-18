@@ -28,15 +28,15 @@
             --border-light: rgba(108, 117, 125, 0.1);
             
             /* Sphere colors */
-            --sphere-1: #ef4444;
-            --sphere-2: #f97316;
-            --sphere-3: #eab308;
-            --sphere-4: #84cc16;
-            --sphere-5: #06b6d4;
-            --sphere-6: #8b5cf6;
-            --sphere-7: #ec4899;
-            --sphere-8: #14b8a6;
-            --sphere-9: #6366f1;
+            --sphere-1: #ef5350;
+            --sphere-2: #ff9800;
+            --sphere-3: #ffc107;
+            --sphere-4: #2196f3;
+            --sphere-5: #03a9f4;
+            --sphere-6: #00bcd4;
+            --sphere-7: #9c27b0;
+            --sphere-8: #7b1fa2;
+            --sphere-9: #512da8;
         }
 
         body {
@@ -550,112 +550,37 @@
         /* Interactive Circles */
         .circles-container {
             position: relative;
-            width: min(100%, 900px);
-            aspect-ratio: 1 / 1;
-            height: min(100vw, 900px);
+            width: min(100%, 1100px);
             margin: 4rem auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             background: white;
-            border-radius: 20px;
-            padding: clamp(2rem, 5vw, 3rem);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            border-radius: 24px;
+            padding: clamp(1.5rem, 4vw, 2.5rem);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
             overflow: visible;
         }
 
+        .care-diagram {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
         .care-circle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            border: 3px solid;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
             cursor: pointer;
-            font-weight: bold;
-            font-size: clamp(1rem, 1.6vw, 1.5rem);
-            font-family: 'Playfair Display', serif;
-            transform: translate(-50%, -50%);
+            transition: filter 0.3s ease;
         }
 
-        .circle-1 {
-            width: 16%;
-            height: 16%;
-            border-color: var(--sphere-1);
-            background: radial-gradient(circle, var(--sphere-1), transparent);
-            z-index: 9;
+        .care-circle:hover,
+        .care-circle:focus-visible {
+            filter: drop-shadow(0 0 24px rgba(0, 0, 0, 0.2));
         }
 
-        .circle-2 {
-            width: 26%;
-            height: 26%;
-            border-color: var(--sphere-2);
-            background: radial-gradient(circle, rgba(249, 115, 22, 0.15), transparent);
-            z-index: 8;
+        .care-circle text {
+            pointer-events: none;
         }
 
-        .circle-3 {
-            width: 36%;
-            height: 36%;
-            border-color: var(--sphere-3);
-            background: radial-gradient(circle, rgba(234, 179, 8, 0.12), transparent);
-            z-index: 7;
-        }
-
-        .circle-4 {
-            width: 46%;
-            height: 46%;
-            border-color: var(--sphere-4);
-            background: radial-gradient(circle, rgba(132, 204, 22, 0.1), transparent);
-            z-index: 6;
-        }
-
-        .circle-5 {
-            width: 56%;
-            height: 56%;
-            border-color: var(--sphere-5);
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.08), transparent);
-            z-index: 5;
-        }
-
-        .circle-6 {
-            width: 66%;
-            height: 66%;
-            border-color: var(--sphere-6);
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.06), transparent);
-            z-index: 4;
-        }
-
-        .circle-7 {
-            width: 76%;
-            height: 76%;
-            border-color: var(--sphere-7);
-            background: radial-gradient(circle, rgba(236, 72, 153, 0.05), transparent);
-            z-index: 3;
-        }
-
-        .circle-8 {
-            width: 86%;
-            height: 86%;
-            border-color: var(--sphere-8);
-            background: radial-gradient(circle, rgba(20, 184, 166, 0.04), transparent);
-            z-index: 2;
-        }
-
-        .circle-9 {
-            width: 96%;
-            height: 96%;
-            border-color: var(--sphere-9);
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.03), transparent);
-            z-index: 1;
-        }
-
-        .care-circle:hover {
-            transform: translate(-50%, -50%) scale(1.05);
-            box-shadow: 0 0 40px currentColor;
+        .care-circle[tabindex="0"]:focus-visible {
+            outline: none;
         }
 
         /* Sphere Popover */
@@ -1704,16 +1629,104 @@
                data-es="El desarrollo moral humano sigue un patrón predecible, expandiéndose desde la preocupación por uno mismo hasta la preocupación por todos los seres. Esto no es solo filosofía—es psicología del desarrollo observable. Cada posición en la Brújula de Valores representa un modo de énfasis, desde el enfoque más estrecho en la seguridad personal hasta la conciencia reflexiva más amplia de los sistemas.">Human moral development follows a predictable pattern, expanding from concern for self to concern for all beings. This isn't just philosophy—it's observable developmental psychology. Each position on the Value Compass represents a mode of emphasis, from the narrowest focus on personal security to the broadest reflexive awareness of systems.</p>
 
             <div class="circles-container">
-                <div class="care-circle circle-1" data-sphere="1"></div>
-                <div class="care-circle circle-2" data-sphere="2"></div>
-                <div class="care-circle circle-3" data-sphere="3"></div>
-                <div class="care-circle circle-4" data-sphere="4"></div>
-                <div class="care-circle circle-5" data-sphere="5"></div>
-                <div class="care-circle circle-6" data-sphere="6"></div>
-                <div class="care-circle circle-7" data-sphere="7"></div>
-                <div class="care-circle circle-8" data-sphere="8"></div>
-                <div class="care-circle circle-9" data-sphere="9"></div>
-                
+                <svg class="care-diagram" viewBox="0 0 1400 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="care-diagram-title">
+                    <title id="care-diagram-title">Nine Contexts of Care</title>
+                    <rect width="1400" height="800" fill="#ffffff"></rect>
+                    <text x="700" y="60" text-anchor="middle" font-family="Georgia, serif" font-size="38" font-weight="300" fill="#333">Nine Contexts of Care</text>
+
+                    <g transform="translate(250, 400)">
+                        <text x="0" y="-220" text-anchor="middle" font-family="Georgia, serif" font-size="26" font-weight="300" fill="#444">Personal</text>
+
+                        <g class="care-circle circle-1" data-sphere="1" transform="translate(0, -120)" tabindex="0" role="button" aria-label="Security Context">
+                            <circle cx="0" cy="0" r="55" fill="white" stroke-width="3" style="stroke: var(--sphere-1);"></circle>
+                            <polygon points="0,-20 -17,20 17,20" fill="var(--sphere-1)" opacity="0.85" transform="scale(0.85)"></polygon>
+                            <text y="85" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="18" font-weight="600" fill="#333">Security</text>
+                            <text y="106" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="14" fill="#777">immediate • self • now</text>
+                        </g>
+
+                        <g class="care-circle circle-2" data-sphere="2" transform="translate(-90, 80)" tabindex="0" role="button" aria-label="Liberty Context">
+                            <circle cx="0" cy="0" r="55" fill="white" stroke-width="3" style="stroke: var(--sphere-2);"></circle>
+                            <path d="M -9,-11 L -9,5 L -3,5 L -3,11 L 3,11 L 3,5 L 9,5 L 9,-11 A 9,9 0 0,0 -9,-11 z" fill="var(--sphere-2)" opacity="0.85" transform="scale(1.1)"></path>
+                            <text y="85" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="18" font-weight="600" fill="#333">Liberty</text>
+                            <text y="106" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="14" fill="#777">defined • bounded • rights</text>
+                        </g>
+
+                        <g class="care-circle circle-3" data-sphere="3" transform="translate(90, 80)" tabindex="0" role="button" aria-label="Stewardship Context">
+                            <circle cx="0" cy="0" r="55" fill="white" stroke-width="3" style="stroke: var(--sphere-3);"></circle>
+                            <path d="M -16,6 L -16,-3 L 0,-14 L 16,-3 L 16,6 z M -11,6 L -11,11 L 11,11 L 11,6 z" fill="var(--sphere-3)" opacity="0.85"></path>
+                            <text y="85" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="18" font-weight="600" fill="#333">Stewardship</text>
+                            <text y="106" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="14" fill="#777">kin • household • legacy</text>
+                        </g>
+                    </g>
+
+                    <g transform="translate(700, 400)">
+                        <text x="0" y="-220" text-anchor="middle" font-family="Georgia, serif" font-size="26" font-weight="300" fill="#444">Social</text>
+
+                        <g class="care-circle circle-4" data-sphere="4" transform="translate(0, -120)" tabindex="0" role="button" aria-label="Loyalty Context">
+                            <circle cx="0" cy="0" r="55" fill="white" stroke-width="3" style="stroke: var(--sphere-4);"></circle>
+                            <g transform="scale(1)">
+                                <circle cx="-9" cy="0" r="11" fill="none" stroke-width="3.5" opacity="0.85" style="stroke: var(--sphere-4);"></circle>
+                                <circle cx="9" cy="0" r="11" fill="none" stroke-width="3.5" opacity="0.85" style="stroke: var(--sphere-4);"></circle>
+                            </g>
+                            <text y="85" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="18" font-weight="600" fill="#333">Loyalty</text>
+                            <text y="106" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="14" fill="#777">member • community • tradition</text>
+                        </g>
+
+                        <g class="care-circle circle-5" data-sphere="5" transform="translate(-90, 80)" tabindex="0" role="button" aria-label="Fairness Context">
+                            <circle cx="0" cy="0" r="55" fill="white" stroke-width="3" style="stroke: var(--sphere-5);"></circle>
+                            <path d="M -17,0 L 17,0 M 0,0 L 0,9 M -14,9 L 14,9 M -14,9 L -9,17 M 14,9 L 9,17" stroke-width="3.5" fill="none" opacity="0.85" style="stroke: var(--sphere-5);"></path>
+                            <text y="85" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="18" font-weight="600" fill="#333">Fairness</text>
+                            <text y="106" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="14" fill="#777">citizen • nation • laws</text>
+                        </g>
+
+                        <g class="care-circle circle-6" data-sphere="6" transform="translate(90, 80)" tabindex="0" role="button" aria-label="Dignity Context">
+                            <circle cx="0" cy="0" r="55" fill="white" stroke-width="3" style="stroke: var(--sphere-6);"></circle>
+                            <circle cx="0" cy="-6" r="12" fill="none" stroke-width="3.5" opacity="0.85" style="stroke: var(--sphere-6);"></circle>
+                            <circle cx="-11" cy="9" r="4" opacity="0.85" style="fill: var(--sphere-6);"></circle>
+                            <circle cx="0" cy="9" r="4" opacity="0.85" style="fill: var(--sphere-6);"></circle>
+                            <circle cx="11" cy="9" r="4" opacity="0.85" style="fill: var(--sphere-6);"></circle>
+                            <text y="85" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="18" font-weight="600" fill="#333">Dignity</text>
+                            <text y="106" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="14" fill="#777">human • all persons • universal</text>
+                        </g>
+                    </g>
+
+                    <g transform="translate(1150, 400)">
+                        <text x="0" y="-220" text-anchor="middle" font-family="Georgia, serif" font-size="26" font-weight="300" fill="#444">Meta</text>
+
+                        <g class="care-circle circle-7" data-sphere="7" transform="translate(0, -120)" tabindex="0" role="button" aria-label="Civility Context">
+                            <circle cx="0" cy="0" r="55" fill="white" stroke-width="3" style="stroke: var(--sphere-7);"></circle>
+                            <path d="M -11,-5 A 9,9 0 0,1 11,-5 M 11,5 A 9,9 0 0,1 -11,5" stroke-width="3.5" fill="none" opacity="0.85" style="stroke: var(--sphere-7);"></path>
+                            <path d="M -9,-2 L -2,-2 L -2,-9 M 9,2 L 2,2 L 2,9" stroke-width="3.5" fill="none" opacity="0.85" style="stroke: var(--sphere-7);"></path>
+                            <text y="85" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="18" font-weight="600" fill="#333">Civility</text>
+                            <text y="106" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="14" fill="#777">rotating • overlapping • dialogue</text>
+                        </g>
+
+                        <g class="care-circle circle-8" data-sphere="8" transform="translate(-90, 80)" tabindex="0" role="button" aria-label="Responsibility Context">
+                            <circle cx="0" cy="0" r="55" fill="white" stroke-width="3" style="stroke: var(--sphere-8);"></circle>
+                            <g transform="scale(0.65)" opacity="0.85" style="stroke: var(--sphere-8);">
+                                <line x1="-18" y1="-18" x2="18" y2="-18" stroke-width="4"></line>
+                                <line x1="-18" y1="0" x2="18" y2="0" stroke-width="4"></line>
+                                <line x1="-18" y1="18" x2="18" y2="18" stroke-width="4"></line>
+                                <line x1="-18" y1="-18" x2="-18" y2="18" stroke-width="4"></line>
+                                <line x1="0" y1="-18" x2="0" y2="18" stroke-width="4"></line>
+                                <line x1="18" y1="-18" x2="18" y2="18" stroke-width="4"></line>
+                                <circle cx="0" cy="0" r="6" fill="var(--sphere-8)" stroke="none"></circle>
+                            </g>
+                            <text y="85" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="18" font-weight="600" fill="#333">Responsibility</text>
+                            <text y="106" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="14" fill="#777">node • systems • cascading</text>
+                        </g>
+
+                        <g class="care-circle circle-9" data-sphere="9" transform="translate(90, 80)" tabindex="0" role="button" aria-label="Accountability Context">
+                            <circle cx="0" cy="0" r="55" fill="white" stroke-width="3" style="stroke: var(--sphere-9);"></circle>
+                            <circle cx="0" cy="0" r="12" fill="none" stroke-width="3.5" opacity="0.85" style="stroke: var(--sphere-9);"></circle>
+                            <circle cx="0" cy="0" r="4" opacity="0.85" style="fill: var(--sphere-9);"></circle>
+                            <path d="M 16,-11 A 18,18 0 0,1 16,11 L 13,8 L 13,13 L 18,13 L 16,11" stroke-width="3.5" fill="none" opacity="0.85" transform="scale(0.85)" style="stroke: var(--sphere-9);"></path>
+                            <text y="85" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="18" font-weight="600" fill="#333">Accountability</text>
+                            <text y="106" text-anchor="middle" font-family="Helvetica, sans-serif" font-size="14" fill="#777">reflexive • learning • feedback</text>
+                        </g>
+                    </g>
+                </svg>
+
                 <!-- Popover element -->
                 <div class="sphere-popover" id="spherePopover">
                     <button class="popover-close" onclick="closePopover()">×</button>
@@ -2980,63 +2993,63 @@
         const sphereData = {
             1: {
                 name: "Security Context",
-                color: "#ef4444",
+                color: "#ef5350",
                 question: "What's threatening me?",
                 description: "This mode protects Security and orbits around immediate harm avoidance.",
                 approach: "Connect to personal safety: 'If government can detain them without trial, what stops them from doing it to you?'"
             },
             2: {
                 name: "Liberty Context",
-                color: "#f97316",
+                color: "#ff9800",
                 question: "Who am I?",
                 description: "This mode protects Liberty and centers personal rights and boundaries.",
                 approach: "'Your rights come from being human, not from government. If rights came from government, government could take them away.'"
             },
             3: {
                 name: "Stewardship Context",
-                color: "#eab308",
+                color: "#ffc107",
                 question: "What can I protect for my own?",
                 description: "This mode protects Stewardship and safeguards immediate family.",
                 approach: "'You'd move heaven and earth to keep your kids safe. These parents are doing the exact same thing.'"
             },
             4: {
                 name: "Loyalty Context",
-                color: "#84cc16",
+                color: "#2196f3",
                 question: "Who is inside our circle?",
                 description: "This mode protects Loyalty and strengthens the shared 'us.'",
                 approach: "'Jose coaches little league. Maria runs the restaurant. When ICE raids our town, we lose neighbors.'"
             },
             5: {
                 name: "Fairness Context",
-                color: "#06b6d4",
+                color: "#03a9f4",
                 question: "How do we relate fairly?",
                 description: "This mode protects Fairness and leans on rule of law and reciprocity.",
                 approach: "'Due process is bedrock American principle. The Constitution says persons, not citizens.'"
             },
             6: {
                 name: "Dignity Context",
-                color: "#8b5cf6",
+                color: "#00bcd4",
                 question: "What unites us?",
                 description: "This mode protects Dignity and honors every person's inherent worth.",
                 approach: "'Every human deserves basic dignity, regardless of where they were born.'"
             },
             7: {
                 name: "Civility Context",
-                color: "#ec4899",
+                color: "#9c27b0",
                 question: "How do we balance all voices?",
                 description: "This mode protects Civility and balances multiple voices.",
                 approach: "'Multiple valid perspectives exist. How do we honor all experiences while moving forward?'"
             },
             8: {
                 name: "Responsibility Context",
-                color: "#14b8a6",
+                color: "#7b1fa2",
                 question: "What realities must coexist?",
                 description: "This mode protects Responsibility and recognizes interdependence.",
                 approach: "'Immigration is part of global systems. Local solutions must account for systemic forces.'"
             },
             9: {
                 name: "Accountability Context",
-                color: "#6366f1",
+                color: "#512da8",
                 question: "How do we self-correct?",
                 description: "This mode protects Accountability and builds self-correcting institutions.",
                 approach: "'Our system must learn from failures. How do we build in feedback loops?'"
@@ -3182,6 +3195,15 @@
                 e.stopPropagation();
                 const sphereNumber = parseInt(this.dataset.sphere);
                 showPopover(sphereNumber, this);
+            });
+
+            circle.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const sphereNumber = parseInt(this.dataset.sphere);
+                    showPopover(sphereNumber, this);
+                }
             });
         });
 
