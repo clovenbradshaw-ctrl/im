@@ -241,10 +241,9 @@
 
         /* Hero Section */
         .hero {
-            min-height: 100vh;
             position: relative;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             padding: 0;
             background: var(--light-cream);
             overflow: hidden;
@@ -254,7 +253,7 @@
             display: grid;
             grid-template-columns: 1.2fr 1fr;
             width: 100%;
-            min-height: 100vh;
+            align-items: center;
         }
 
         .hero-content {
@@ -289,6 +288,10 @@
                 radial-gradient(circle at 80% 80%, var(--accent-sky) 0%, transparent 50%);
             mix-blend-mode: screen;
             opacity: 0.3;
+        }
+
+        .hero-bottom {
+            padding: 0 4rem 4rem;
         }
 
         .hero h1 {
@@ -1239,6 +1242,10 @@
                 order: -1;
             }
 
+            .hero-bottom {
+                padding: 0 2.5rem 3rem;
+            }
+
             .tactical-brief {
                 gap: 2rem;
             }
@@ -1268,6 +1275,10 @@
 
             .hero-content {
                 padding: 2.5rem 1.75rem;
+            }
+
+            .hero-bottom {
+                padding: 0 1.75rem 2.5rem;
             }
 
             .tactical-brief {
@@ -1437,68 +1448,68 @@
                     <span data-en="The Value Evolution Framework:" data-es="El Marco de Evolución de Valores:">The Value Evolution Framework:</span><br>
                     <span data-en="Strategic Communication for Immigration Advocacy" data-es="Comunicación Estratégica para la Defensa de la Inmigración">Strategic Communication for Immigration Advocacy</span>
                 </h1>
-                
-                <div class="hero-purpose">
-                    <h2 data-en="Why We Need Them: The Strategic Imperative" data-es="Por Qué Los Necesitamos: El Imperativo Estratégico">Why We Need Them: The Strategic Imperative</h2>
-                    
-                    <p data-en="Here's the uncomfortable math: we cannot win lasting immigration reform with progressive coalitions alone. The electoral map, legislative thresholds, and judicial appointments all require broader support than our current base provides. More critically, policy victories without underlying value alignment are temporary—reversed with the next election cycle."
-                       data-es="Aquí están las matemáticas incómodas: no podemos ganar una reforma migratoria duradera solo con coaliciones progresistas. El mapa electoral, los umbrales legislativos y los nombramientos judiciales requieren un apoyo más amplio del que proporciona nuestra base actual. Más críticamente, las victorias políticas sin alineación de valores subyacentes son temporales—revertidas con el próximo ciclo electoral.">Here's the uncomfortable math: we cannot win lasting immigration reform with progressive coalitions alone. The electoral map, legislative thresholds, and judicial appointments all require broader support than our current base provides. More critically, policy victories without underlying value alignment are temporary—reversed with the next election cycle.</p>
-                    
-                    <p data-en="This isn't about abandoning our principles or diluting our message. It's about recognizing that 40-45% of Americans hold conservative worldviews that seem opposed to immigrant rights. We have three choices: write them off and lose, overpower them temporarily and watch our gains reversed, or help them discover that their own deeply held values already support what we're fighting for."
-                       data-es="Esto no se trata de abandonar nuestros principios o diluir nuestro mensaje. Se trata de reconocer que el 40-45% de los estadounidenses tienen cosmovisiones conservadoras que parecen oponerse a los derechos de los inmigrantes. Tenemos tres opciones: descartarlos y perder, dominarlos temporalmente y ver nuestros logros revertidos, o ayudarlos a descubrir que sus propios valores profundamente arraigados ya apoyan aquello por lo que estamos luchando.">This isn't about abandoning our principles or diluting our message. It's about recognizing that 40-45% of Americans hold conservative worldviews that seem opposed to immigrant rights. We have three choices: write them off and lose, overpower them temporarily and watch our gains reversed, or help them discover that their own deeply held values already support what we're fighting for.</p>
-                    
-                    <div class="key-insight" style="background: linear-gradient(135deg, var(--accent-coral), var(--primary-rust)); margin: 2rem 0;">
-                        <p data-en="Critical Warning: Every time we argue on their terms—accepting that 'strong borders' means cruelty, that 'law and order' means family separation—we reinforce the very frameworks we need to evolve. Worse, confrontational approaches trigger defensive backlash that can set our cause back by years."
-                           data-es="Advertencia Crítica: Cada vez que argumentamos en sus términos—aceptando que 'fronteras fuertes' significa crueldad, que 'ley y orden' significa separación familiar—reforzamos los mismos marcos que necesitamos evolucionar. Peor aún, los enfoques confrontacionales desencadenan una reacción defensiva que puede retrasar nuestra causa por años.">Critical Warning: Every time we argue on their terms—accepting that "strong borders" means cruelty, that "law and order" means family separation—we reinforce the very frameworks we need to evolve. Worse, confrontational approaches trigger defensive backlash that can set our cause back by years.</p>
-                    </div>
-                    
-                    <p data-en="The dual danger: Accepting their frames strengthens them, while attacking their identity triggers regression. When people feel their core values are under assault, they don't evolve—they entrench. They retreat to narrower moral circles and become more resistant to change. This is why moral shaming, despite feeling righteous, is strategically counterproductive."
-                       data-es="El doble peligro: Aceptar sus marcos los fortalece, mientras que atacar su identidad desencadena regresión. Cuando las personas sienten que sus valores fundamentales están bajo asalto, no evolucionan—se atrinchran. Se retiran a círculos morales más estrechos y se vuelven más resistentes al cambio. Por eso la vergüenza moral, a pesar de sentirse justa, es estratégicamente contraproducente.">The dual danger: Accepting their frames strengthens them, while attacking their identity triggers regression. When people feel their core values are under assault, they don't evolve—they entrench. They retreat to narrower moral circles and become more resistant to change. This is why moral shaming, despite feeling righteous, is strategically counterproductive.</p>
-                    
-                    <div class="key-insight" style="background: linear-gradient(135deg, var(--primary-rust), var(--primary-clay)); margin: 2rem 0;">
-                        <p data-en="Converting 10% of opponents into supporters is more powerful than mobilizing 30% more of our base. One creates lasting change; the other creates backlash."
-                           data-es="Convertir al 10% de los oponentes en partidarios es más poderoso que movilizar un 30% más de nuestra base. Uno crea un cambio duradero; el otro crea una reacción violenta.">Converting 10% of opponents into supporters is more powerful than mobilizing 30% more of our base. One creates lasting change; the other creates backlash.</p>
-                    </div>
-                    
-                    <p data-en="The strategic reality: Sustainable immigration reform requires either overwhelming political dominance we don't have, or value evolution in communities that currently oppose us. Since we lack the numbers for dominance, evolution becomes our only path to lasting victory."
-                       data-es="La realidad estratégica: La reforma migratoria sostenible requiere o un dominio político abrumador que no tenemos, o una evolución de valores en las comunidades que actualmente se oponen a nosotros. Como carecemos de los números para el dominio, la evolución se convierte en nuestro único camino hacia la victoria duradera.">The strategic reality: Sustainable immigration reform requires either overwhelming political dominance we don't have, or value evolution in communities that currently oppose us. Since we lack the numbers for dominance, evolution becomes our only path to lasting victory.</p>
-                    
-                    <div class="tactical-brief">
-                        <div class="tactical-summary">
-                            <h2 data-en="Our Tactical Purpose" data-es="Nuestro Propósito Táctico">Our Tactical Purpose</h2>
-                            <p data-en="This framework provides a strategic approach to immigration advocacy that achieves immediate policy wins while laying groundwork for long-term value evolution. We're not trying to reinforce conservative frameworks or pretend all moral positions are equal."
-                               data-es="Este marco proporciona un enfoque estratégico para la defensa de la inmigración que logra victorias políticas inmediatas mientras sienta las bases para la evolución de valores a largo plazo. No estamos tratando de reforzar marcos conservadores o pretender que todas las posiciones morales son iguales.">This framework provides a strategic approach to immigration advocacy that achieves immediate policy wins while laying groundwork for long-term value evolution. We're not trying to reinforce conservative frameworks or pretend all moral positions are equal.</p>
+            </div>
 
-                            <p data-en="Instead, we're recognizing a critical tactical reality: conservatives already hold values that logically support immigrant rights—they just haven't made the connection yet. By revealing these hidden contradictions, we can achieve immediate victories while creating pathways for broader moral development."
-                               data-es="En cambio, estamos reconociendo una realidad táctica crítica: los conservadores ya tienen valores que lógicamente apoyan los derechos de los inmigrantes—simplemente no han hecho la conexión todavía. Al revelar estas contradicciones ocultas, podemos lograr victorias inmediatas mientras creamos caminos para un desarrollo moral más amplio.">Instead, we're recognizing a critical tactical reality: <strong>conservatives already hold values that logically support immigrant rights—they just haven't made the connection yet.</strong> By revealing these hidden contradictions, we can achieve immediate victories while creating pathways for broader moral development.</p>
-                        </div>
-                        <div class="tactical-pillars">
-                            <span class="pillars-kicker" data-en="Strategic Focus" data-es="Enfoque Estratégico">Strategic Focus</span>
-                            <div class="tactical-goals">
-                                <div class="goal-card">
-                                    <h3 data-en="Immediate Win" data-es="Victoria Inmediata">Immediate Win</h3>
-                                    <p data-en="Use existing conservative values to support pro-immigrant policies" data-es="Usar valores conservadores existentes para apoyar políticas pro-inmigrantes">Use existing conservative values to support pro-immigrant policies</p>
-                                </div>
-                                <div class="goal-card">
-                                    <h3 data-en="Avoid Reinforcement" data-es="Evitar Reforzamiento">Avoid Reinforcement</h3>
-                                    <p data-en="Never strengthen narrow moral frameworks or exclusionary thinking" data-es="Nunca fortalecer marcos morales estrechos o pensamientos excluyentes">Never strengthen narrow moral frameworks or exclusionary thinking</p>
-                                </div>
-                                <div class="goal-card">
-                                    <h3 data-en="Create Evolution" data-es="Crear Evolución">Create Evolution</h3>
-                                    <p data-en="Build bridges that naturally lead to expanded circles of moral concern" data-es="Construir puentes que naturalmente lleven a círculos expandidos de preocupación moral">Build bridges that naturally lead to expanded circles of moral concern</p>
-                                </div>
+            <div class="hero-visual">
+                <img src="https://storage.googleapis.com/intelechia-content/im/neighbors%202.png" alt="Neighbors in conversation">
+            </div>
+        </div>
+        <div class="hero-bottom">
+            <div class="hero-purpose">
+                <h2 data-en="Why We Need Them: The Strategic Imperative" data-es="Por Qué Los Necesitamos: El Imperativo Estratégico">Why We Need Them: The Strategic Imperative</h2>
+                
+                <p data-en="Here's the uncomfortable math: we cannot win lasting immigration reform with progressive coalitions alone. The electoral map, legislative thresholds, and judicial appointments all require broader support than our current base provides. More critically, policy victories without underlying value alignment are temporary—reversed with the next election cycle."
+                   data-es="Aquí están las matemáticas incómodas: no podemos ganar una reforma migratoria duradera solo con coaliciones progresistas. El mapa electoral, los umbrales legislativos y los nombramientos judiciales requieren un apoyo más amplio del que proporciona nuestra base actual. Más críticamente, las victorias políticas sin alineación de valores subyacentes son temporales—revertidas con el próximo ciclo electoral.">Here's the uncomfortable math: we cannot win lasting immigration reform with progressive coalitions alone. The electoral map, legislative thresholds, and judicial appointments all require broader support than our current base provides. More critically, policy victories without underlying value alignment are temporary—reversed with the next election cycle.</p>
+                
+                <p data-en="This isn't about abandoning our principles or diluting our message. It's about recognizing that 40-45% of Americans hold conservative worldviews that seem opposed to immigrant rights. We have three choices: write them off and lose, overpower them temporarily and watch our gains reversed, or help them discover that their own deeply held values already support what we're fighting for."
+                   data-es="Esto no se trata de abandonar nuestros principios o diluir nuestro mensaje. Se trata de reconocer que el 40-45% de los estadounidenses tienen cosmovisiones conservadoras que parecen oponerse a los derechos de los inmigrantes. Tenemos tres opciones: descartarlos y perder, dominarlos temporalmente y ver nuestros logros revertidos, o ayudarlos a descubrir que sus propios valores profundamente arraigados ya apoyan aquello por lo que estamos luchando.">This isn't about abandoning our principles or diluting our message. It's about recognizing that 40-45% of Americans hold conservative worldviews that seem opposed to immigrant rights. We have three choices: write them off and lose, overpower them temporarily and watch our gains reversed, or help them discover that their own deeply held values already support what we're fighting for.</p>
+                
+                <div class="key-insight" style="background: linear-gradient(135deg, var(--accent-coral), var(--primary-rust)); margin: 2rem 0;">
+                    <p data-en="Critical Warning: Every time we argue on their terms—accepting that 'strong borders' means cruelty, that 'law and order' means family separation—we reinforce the very frameworks we need to evolve. Worse, confrontational approaches trigger defensive backlash that can set our cause back by years."
+                       data-es="Advertencia Crítica: Cada vez que argumentamos en sus términos—aceptando que 'fronteras fuertes' significa crueldad, que 'ley y orden' significa separación familiar—reforzamos los mismos marcos que necesitamos evolucionar. Peor aún, los enfoques confrontacionales desencadenan una reacción defensiva que puede retrasar nuestra causa por años.">Critical Warning: Every time we argue on their terms—accepting that "strong borders" means cruelty, that "law and order" means family separation—we reinforce the very frameworks we need to evolve. Worse, confrontational approaches trigger defensive backlash that can set our cause back by years.</p>
+                </div>
+                
+                <p data-en="The dual danger: Accepting their frames strengthens them, while attacking their identity triggers regression. When people feel their core values are under assault, they don't evolve—they entrench. They retreat to narrower moral circles and become more resistant to change. This is why moral shaming, despite feeling righteous, is strategically counterproductive."
+                   data-es="El doble peligro: Aceptar sus marcos los fortalece, mientras que atacar su identidad desencadena regresión. Cuando las personas sienten que sus valores fundamentales están bajo asalto, no evolucionan—se atrinchran. Se retiran a círculos morales más estrechos y se vuelven más resistentes al cambio. Por eso la vergüenza moral, a pesar de sentirse justa, es estratégicamente contraproducente.">The dual danger: Accepting their frames strengthens them, while attacking their identity triggers regression. When people feel their core values are under assault, they don't evolve—they entrench. They retreat to narrower moral circles and become more resistant to change. This is why moral shaming, despite feeling righteous, is strategically counterproductive.</p>
+                
+                <div class="key-insight" style="background: linear-gradient(135deg, var(--primary-rust), var(--primary-clay)); margin: 2rem 0;">
+                    <p data-en="Converting 10% of opponents into supporters is more powerful than mobilizing 30% more of our base. One creates lasting change; the other creates backlash."
+                       data-es="Convertir al 10% de los oponentes en partidarios es más poderoso que movilizar un 30% más de nuestra base. Uno crea un cambio duradero; el otro crea una reacción violenta.">Converting 10% of opponents into supporters is more powerful than mobilizing 30% more of our base. One creates lasting change; the other creates backlash.</p>
+                </div>
+                
+                <p data-en="The strategic reality: Sustainable immigration reform requires either overwhelming political dominance we don't have, or value evolution in communities that currently oppose us. Since we lack the numbers for dominance, evolution becomes our only path to lasting victory."
+                   data-es="La realidad estratégica: La reforma migratoria sostenible requiere o un dominio político abrumador que no tenemos, o una evolución de valores en las comunidades que actualmente se oponen a nosotros. Como carecemos de los números para el dominio, la evolución se convierte en nuestro único camino hacia la victoria duradera.">The strategic reality: Sustainable immigration reform requires either overwhelming political dominance we don't have, or value evolution in communities that currently oppose us. Since we lack the numbers for dominance, evolution becomes our only path to lasting victory.</p>
+                
+                <div class="tactical-brief">
+                    <div class="tactical-summary">
+                        <h2 data-en="Our Tactical Purpose" data-es="Nuestro Propósito Táctico">Our Tactical Purpose</h2>
+                        <p data-en="This framework provides a strategic approach to immigration advocacy that achieves immediate policy wins while laying groundwork for long-term value evolution. We're not trying to reinforce conservative frameworks or pretend all moral positions are equal."
+                           data-es="Este marco proporciona un enfoque estratégico para la defensa de la inmigración que logra victorias políticas inmediatas mientras sienta las bases para la evolución de valores a largo plazo. No estamos tratando de reforzar marcos conservadores o pretender que todas las posiciones morales son iguales.">This framework provides a strategic approach to immigration advocacy that achieves immediate policy wins while laying groundwork for long-term value evolution. We're not trying to reinforce conservative frameworks or pretend all moral positions are equal.</p>
+
+                        <p data-en="Instead, we're recognizing a critical tactical reality: conservatives already hold values that logically support immigrant rights—they just haven't made the connection yet. By revealing these hidden contradictions, we can achieve immediate victories while creating pathways for broader moral development."
+                           data-es="En cambio, estamos reconociendo una realidad táctica crítica: los conservadores ya tienen valores que lógicamente apoyan los derechos de los inmigrantes—simplemente no han hecho la conexión todavía. Al revelar estas contradicciones ocultas, podemos lograr victorias inmediatas mientras creamos caminos para un desarrollo moral más amplio.">Instead, we're recognizing a critical tactical reality: <strong>conservatives already hold values that logically support immigrant rights—they just haven't made the connection yet.</strong> By revealing these hidden contradictions, we can achieve immediate victories while creating pathways for broader moral development.</p>
+                    </div>
+                    <div class="tactical-pillars">
+                        <span class="pillars-kicker" data-en="Strategic Focus" data-es="Enfoque Estratégico">Strategic Focus</span>
+                        <div class="tactical-goals">
+                            <div class="goal-card">
+                                <h3 data-en="Immediate Win" data-es="Victoria Inmediata">Immediate Win</h3>
+                                <p data-en="Use existing conservative values to support pro-immigrant policies" data-es="Usar valores conservadores existentes para apoyar políticas pro-inmigrantes">Use existing conservative values to support pro-immigrant policies</p>
+                            </div>
+                            <div class="goal-card">
+                                <h3 data-en="Avoid Reinforcement" data-es="Evitar Reforzamiento">Avoid Reinforcement</h3>
+                                <p data-en="Never strengthen narrow moral frameworks or exclusionary thinking" data-es="Nunca fortalecer marcos morales estrechos o pensamientos excluyentes">Never strengthen narrow moral frameworks or exclusionary thinking</p>
+                            </div>
+                            <div class="goal-card">
+                                <h3 data-en="Create Evolution" data-es="Crear Evolución">Create Evolution</h3>
+                                <p data-en="Build bridges that naturally lead to expanded circles of moral concern" data-es="Construir puentes que naturalmente lleven a círculos expandidos de preocupación moral">Build bridges that naturally lead to expanded circles of moral concern</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <div class="hero-visual">
-                <img src="https://storage.googleapis.com/intelechia-content/im/neighbors%202.png" alt="Neighbors in conversation">
-            </div>
         </div>
     </section>
-
     <!-- Podcast Section -->
     <section class="section fade-in podcast-section" id="podcast">
         <div class="container">
